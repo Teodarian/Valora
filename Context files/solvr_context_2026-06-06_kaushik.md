@@ -1,7 +1,7 @@
 # Solvr — Full Context File
 **Created:** 2026-06-03
-**Last updated:** 2026-06-03
-**Operator:** Kaushik Rompichala
+**Last updated:** 2026-06-06
+**Operator denne sesjonen:** Kaushik Rompichala
 **AI:** Claude (Sonnet 4.6)
 
 ---
@@ -9,12 +9,27 @@
 ## Session end rules (mandatory)
 
 When the user types "end session", the AI must:
-1. Generate a new `solvr_context_[YYYY-MM-DD].md` file (user downloads manually)
+1. Generate a new `solvr_context_[YYYY-MM-DD]_[kaushik/teo].md` file (user downloads manually)
 2. Create a new entry in the **AI Carryforwards** Notion database with a subpage containing the full context
 3. Add an entry to the **Progress Log** (Added by: Claude, correct date, Phase, description)
 4. Update **Bug Tracker** — resolve/archive fixed bugs, add new ones
 5. Update checklists on BottByrå and Vendera product pages
-6. Prompt Kaushik to add his own words to the Progress Log
+6. Prompt operator to add their own words to the Progress Log
+
+## Session start rules (mandatory)
+
+When a new chat begins and the context file is uploaded, the AI must **before doing any work**:
+1. Ask "Hvem opererer denne sesjonen — Kaushik eller Teo?" if not already clear from the file
+2. Read the context file fully
+3. Fetch the following Notion pages live to catch anything changed since the file was written:
+   - Solvr Company HQ: https://app.notion.com/p/374b05d7790b815f9689d396569562bd
+   - BottByrå Oslo: https://app.notion.com/p/374b05d7790b810ba12fcb5e31990e21
+   - Vendera: https://app.notion.com/p/374b05d7790b81489e4cd216e1784380
+   - Progress Log: https://app.notion.com/p/51c52de4c64346b18cf6b6ad2b1fa716
+   - Bug Tracker: https://app.notion.com/p/ae74217f7c804e8f9630d130f3aad7dc
+   - AI Carryforwards: https://app.notion.com/p/fe24cbd1c8874030b94f26b5a526d5c6
+4. Confirm out loud: operator identity, current status, any discrepancies between context file and Notion, understanding of the task
+5. Only then start work
 
 ---
 
@@ -27,9 +42,10 @@ When the user types "end session", the AI must:
 | **Teo** | Vendera — backend, Flask, API-migrasjon |
 
 - **Selskapsnavn:** Solvr
-- **Grunnlegger:** Kaushik Rompichala (student, Oslo, Norge)
-- **Modell:** Solo-operator — bruk alltid "jeg" og "Kaushik", aldri "vi" eller "oss"
+- **Type:** Lite digitalt konsulentfirma — to personer, Oslo, Norge
+- **Modell:** Vi jobber sammen. Bruk alltid "vi" og "oss", aldri enkeltpersoner med mindre det gjelder spesifikt ansvarsområde
 - **Produkter:** BottByrå Oslo + Vendera
+- **Retning:** To produktlinjer — custom chatbot-integrasjon for bedrifter (BottByrå) og ERP for skolers elevbedrifter (Vendera)
 - **Notion HQ:** https://app.notion.com/p/374b05d7790b815f9689d396569562bd
 - **Tone:** Direkte, ingen motivasjonstaler, ingen emoji i leveranser
 - **Forretningsspråk:** Norsk til klienter, norsk i Notion
@@ -38,7 +54,8 @@ When the user types "end session", the AI must:
 
 ## 2. BottByrå Oslo — nåværende status
 
-**Konsept:** Selger AI chatbots til lokale Oslo-bedrifter (barbershops, treningssentre, restauranter, saloner).
+**Konsept:** Bygger og integrerer custom chatbotter for lokale bedrifter. Primærmarked: Oslo (barbershops, treningssentre, restauranter, saloner).
+**Ansvarlig:** Kaushik
 **Verdiforslag:** "Kundene dine får svar automatisk — selv klokken 23. Ingen lønnskostnad, ingen manuelle svar."
 **Notion-side:** https://app.notion.com/p/374b05d7790b810ba12fcb5e31990e21
 
@@ -158,19 +175,19 @@ Informasjon om restauranten:
 - For allergiinformasjon, henvis alltid kunden til å ringe direkte
 ```
 
-### Outreach-maler
-**Norsk DM (første kontakt):**
-Hei [navn]! Jeg la merke til at dere ikke har et automatisk svar-system på Instagram eller nettsiden. Jeg er student og bygger enkle chatbotter for lokale bedrifter i Oslo. Det betyr at kunder kan få svar på spørsmål og bestille time 24/7, uten at du trenger å svare manuelt. Jeg har laget en demo til akkurat en [frisørsalong/treningssenter/restaurant] som jeg gjerne viser deg på 10 minutter. Interessert?
+### Outreach-retningslinjer
+**Norsk DM (første kontakt) — mal:**
+Hei [navn]! Vi la merke til at dere ikke har et automatisk svar-system på Instagram eller nettsiden. Vi bygger enkle chatbotter for lokale bedrifter i Oslo. Det betyr at kunder kan få svar på spørsmål og bestille time 24/7, uten at du trenger å svare manuelt. Vi har laget en demo til akkurat en [frisørsalong/treningssenter/restaurant] som vi gjerne viser deg på 10 minutter. Interessert?
 
 **Oppfølging (3 dager uten svar):**
-Hei igjen! Bare ville sjekke om du fikk meldingen min. Demoen tar bare 10 minutter — ingen forpliktelse. Vil du ta en titt?
+Hei igjen! Bare ville sjekke om du fikk meldingen vår. Demoen tar bare 10 minutter — ingen forpliktelse. Vil du ta en titt?
 
-**På demo — bruk disse ordene:**
+**På demo — bruk disse formuleringene:**
 - "Den svarer kundene dine automatisk — selv om natten"
 - "Den booker timer uten at du trenger å være pålogget"
 - "Den håndterer de samme 10 spørsmålene du får hver uke"
 
-**Aldri si:** AI, machine learning, GPT, automation workflow, API
+**Aldri si til klienter:** AI, machine learning, GPT, automation workflow, API
 
 ### Designregler (ikke-forhandlingsbare)
 - Hvit `#ffffff` / Svart `#111111` / Gull `#c9a84c`
@@ -197,7 +214,8 @@ repo/
 
 ## 3. Vendera — nåværende status
 
-**Konsept:** ERP/styringssystem for norske elevbedrifter. Tidligere navn: Valora.
+**Konsept:** ERP/styringssystem solgt til skoler for bruk i elevbedrifter. Tidligere navn: Valora.
+**Ansvarlig:** Teo
 **Notion-side:** https://app.notion.com/p/374b05d7790b81489e4cd216e1784380
 
 ### Tech Stack
@@ -336,24 +354,22 @@ Alle ruter må filtrere på `company_id == session["company_id"]`.
 
 ### Selskapets neste steg
 - [ ] Velg domene for Solvr (f.eks. solvr.no)
-- [ ] Vurder om BottByrå og Vendera skal ha egne underdomener
+- [ ] Separate nettsider for BottByrå og Vendera (ikke felles — målgruppene er for ulike)
 - [ ] Bestem betalingsstruktur (Stripe / Vipps) for begge produkter
-- [ ] Sett opp felles e-post (kaushik@solvr.no e.l.)
+- [ ] Sett opp felles e-post (f.eks. hei@solvr.no)
 
 ---
 
-## 5. Endringer denne sesjonen (2026-06-03)
+## 5. Endringer denne sesjonen (2026-06-06)
 
-- Solvr valgt som selskapsnavn (fra shortlist: Solvr, Verkr, Labnord)
-- Hele Notion HQ bygget fra bunnen av basert på to kontekstfiler
-- Client CRM, Finance Tracker, Progress Log, Bug Tracker opprettet (sentralisert)
-- BottByrå Oslo produktside opprettet med all info
-- Vendera produktside opprettet med all info
-- 9 Progress Log-oppføringer lagt inn
-- 15 Bug Tracker-oppføringer (10 arkivert/løst, 5 åpne)
-- AI Carryforwards database opprettet
-- AI Workflow-strategiside opprettet med end session-protokoll
-- Kontekstfil-system etablert med GitHub-lagring
+- Lagt til **Session start rules** i kontekstfil og AI Workflow-strategiside i Notion
+- AI henter nå alle Notion-sider automatisk ved sesjonstart
+- **Identitetsendring:** Solvr er nå et to-persons konsulentfirma (Kaushik + Teo) — ikke solo-operator
+- Bruk "vi/oss" gjennomgående — aldri enkeltperson med mindre det gjelder spesifikt ansvarsområde
+- Vendera reposisjonert: ERP solgt til skoler for bruk i elevbedrifter
+- BottByrå reposisjonert: custom chatbot-integrasjon for bedrifter
+- Beslutning: separate nettsider for BottByrå og Vendera (ikke felles)
+- Vendera trenger ikke public nettside ennå — fokus er på produktferdighet først
 
 ---
 
@@ -374,7 +390,7 @@ Alle ruter må filtrere på `company_id == session["company_id"]`.
 - Kontekstfil heter alltid: `solvr_context_YYYY-MM-DD_[kaushik/teo].md`
 - Lagres i GitHub-repo under `/context/`
 - BottByrå alltid: stor B, dobbel t, stor B, å — aldri BotByrå
-- Bruk "jeg" og "Kaushik" — aldri "vi" eller "oss"
+- Bruk alltid "vi" og "oss" — aldri enkeltpersoner med mindre det gjelder spesifikt ansvarsområde
 - Ingen emoji i noen klientvendt leveranse
 - Aldri si til klienter: AI, machine learning, GPT, automation workflow, API
-- Tone mot Kaushik: direkte, ingen motivasjonstaler
+- Tone: direkte, ingen motivasjonstaler

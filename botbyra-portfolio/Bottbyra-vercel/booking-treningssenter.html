@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oslo Treningssenter — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #131313;
+      --bg-low:  #1b1b1b;
+      --bg-mid:  #1f1f1f;
+      --outline: #3a3a3a;
+      --on-bg:   #e2e2e2;
+      --muted:   #a1a1a1;
+      --orange:  #ff5c00;
+      --white:   #ffffff;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--on-bg);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .topbar {
+      padding: 0 48px;
+      height: 56px;
+      border-bottom: 1px solid var(--outline);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(19,19,19,0.92);
+      backdrop-filter: blur(16px);
+    }
+
+    .back-link {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: color 0s;
+    }
+
+    .back-link:hover { color: var(--orange); }
+    .back-arrow { font-size: 14px; }
+
+    .topbar-brand {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 28px;
+    }
+
+    .eyebrow::before { content: '[ '; }
+    .eyebrow::after  { content: ' ]'; }
+
+    h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(28px, 5vw, 56px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 40px;
+    }
+
+    .divider {
+      width: 32px;
+      height: 2px;
+      background: var(--orange);
+      margin: 0 auto 40px;
+    }
+
+    .content-box {
+      border: 1px solid var(--outline);
+      background: var(--bg-low);
+      padding: 40px 48px;
+      max-width: 560px;
+      text-align: left;
+    }
+
+    p {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 12px;
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    p strong {
+      color: var(--on-bg);
+      font-weight: 400;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 40px;
+      padding: 14px 36px;
+      background: transparent;
+      color: var(--on-bg);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--outline);
+      transition: background 0s, color 0s;
+    }
+
+    .back-btn:hover {
+      background: var(--orange);
+      color: var(--bg);
+      border-color: var(--orange);
+    }
+
+    footer {
+      padding: 0 48px;
+      height: 40px;
+      border-top: 1px solid var(--outline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .footer-logo span { color: var(--orange); }
+
+    @media (max-width: 600px) {
+      .topbar { padding: 0 24px; }
+      footer { padding: 0 24px; }
+      .content-box { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a href="index.html" class="back-link">
+      <span class="back-arrow">&#8592;</span> Tilbake til BottByrå Oslo
+    </a>
+    <span class="topbar-brand">Oslo Treningssenter</span>
+  </div>
+
+  <main>
+    <p class="eyebrow">Demonnettside</p>
+    <h1>Oslo Treningssenter</h1>
+    <div class="divider"></div>
+    <div class="content-box">
+      <p>Dette er en <strong>eksempelnettside</strong> laget av BottByrå Oslo.</p>
+      <p>Den eksisterer ikke for å representere en ekte bedrift. Den viser at en chatbott kan videresende brukeren til akkurat den siden du ønsker — en bookingside, en meny eller et kontaktskjema.</p>
+      <p>I en ekte løsning ville denne siden vært tilpasset med reell informasjon og funksjonalitet.</p>
+    </div>
+    <a href="index.html" class="back-btn">Tilbake til hovedsiden</a>
+  </main>
+
+  <footer>
+    <span class="footer-logo">Bott<span>Byrå</span> Oslo — Kaushik & Teo</span>
+    <span style="font-family:'Space Mono',monospace;font-size:10px;color:#353535;letter-spacing:0.06em;">// 2026</span>
+  </footer>
+
+</body>
+</html>

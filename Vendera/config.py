@@ -1,4 +1,5 @@
 import os
+import random as rd
 
 
 class Config:

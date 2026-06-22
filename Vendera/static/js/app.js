@@ -102,6 +102,18 @@ function cloneDefaultData() {
   return structuredClone(defaultData);
 }
 
+async function apiRequest(url, options = {}) {
+  const response = await fetch(url, {
+    credentials: "same-origin",
+    headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+    ...options,
+  });
+  let responseData = {};
+  try { responseData = await response.json(); } catch { responseData = {}; }
+  if (!response.ok) throw new Error(responseData.error || "Noe gikk galt med serveren.");
+  return responseData;
+}
+
 function loadRegistry() {
   const savedRegistry =
     localStorage.getItem(REGISTRY_KEY) ||
@@ -1591,75 +1603,55 @@ document.querySelector("#back-from-admin").addEventListener("click", () => {
   showOnly(welcomeScreen);
 });
 
-document.querySelector("#register-form").addEventListener("submit", (event) => {
+document.querySelector("#register-form").addEventListener("submit", async (event) => {
   event.preventDefault();
-
-  const email = document.querySelector("#register-email").value.trim();
-
-  const existingCompany = registry.find(
-    (entry) => normalizeName(entry.user.email) === normalizeName(email)
-  );
-
-  if (existingCompany) {
-    alert("Det finnes allerede en elevbedrift registrert med denne e-posten.");
-    return;
+  try {
+    const result = await apiRequest("/api/register", {
+      method: "POST",
+      body: JSON.stringify({
+        companyName: document.querySelector("#company-name").value.trim(),
+        school: document.querySelector("#company-school").value.trim(),
+        userName: document.querySelector("#ceo-name").value.trim(),
+        email: document.querySelector("#register-email").value.trim(),
+        password: document.querySelector("#register-password").value,
+      }),
+    });
+    data = cloneDefaultData();
+    data.company = { ...data.company, ...result.company };
+    data.user = { ...data.user, ...result.user };
+    data.isLoggedIn = true;
+    saveData();
+    event.target.reset();
+    showApp();
+  } catch (err) {
+    alert(err.message);
   }
-
-  data = cloneDefaultData();
-
-  data.company.id = createId();
-  data.company.name = document.querySelector("#company-name").value.trim();
-  data.company.school = document.querySelector("#company-school").value.trim();
-
-  data.user.name = document.querySelector("#ceo-name").value.trim();
-  data.user.email = email;
-  data.user.password = document.querySelector("#register-password").value;
-
-  data.isLoggedIn = true;
-
-  saveData();
-  event.target.reset();
-  showApp();
 });
 
-document.querySelector("#login-form").addEventListener("submit", (event) => {
+document.querySelector("#login-form").addEventListener("submit", async (event) => {
   event.preventDefault();
-
-  const email = document.querySelector("#login-email").value.trim();
-  const password = document.querySelector("#login-password").value;
-
-  const companyEntry = registry.find(
-    (entry) =>
-      normalizeName(entry.user.email) === normalizeName(email) &&
-      entry.user.password === password
-  );
-
-  if (!companyEntry) {
-    alert("Feil e-post eller passord.");
-    return;
+  try {
+    const result = await apiRequest("/api/login", {
+      method: "POST",
+      body: JSON.stringify({
+        email: document.querySelector("#login-email").value.trim(),
+        password: document.querySelector("#login-password").value,
+      }),
+    });
+    data = cloneDefaultData();
+    data.company = { ...data.company, ...result.company };
+    data.user = { ...data.user, ...result.user };
+    data.isLoggedIn = true;
+    saveData();
+    event.target.reset();
+    showApp();
+  } catch (err) {
+    alert(err.message);
   }
-
-  data = migrateData({
-    ...cloneDefaultData(),
-    ...companyEntry,
-    company: {
-      ...defaultData.company,
-      ...(companyEntry.company || {}),
-    },
-    user: {
-      ...defaultData.user,
-      ...(companyEntry.user || {}),
-    },
-  });
-
-  data.isLoggedIn = true;
-
-  saveData();
-  event.target.reset();
-  showApp();
 });
 
-document.querySelector("#logout-btn").addEventListener("click", () => {
+document.querySelector("#logout-btn").addEventListener("click", async () => {
+  await apiRequest("/api/logout", { method: "POST" });
   clearAllEditModes();
   data.isLoggedIn = false;
   saveData();

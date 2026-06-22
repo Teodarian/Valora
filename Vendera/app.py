@@ -13,8 +13,9 @@ BASE_DIR = Path(__file__).resolve().parent
 def create_app():
     app = Flask(
         __name__,
-        template_folder=str(BASE_DIR / "templates"),
-        static_folder=str(BASE_DIR / "static"),
+        root_path=str(BASE_DIR),
+        template_folder="templates",
+        static_folder="static",
     )
 
     app.config.from_object(Config)
@@ -26,6 +27,10 @@ def create_app():
     @app.route("/")
     def index():
         return render_template("index.html")
+
+    @app.route("/test-template")
+    def test_template():
+        return "Template folder works"
 
     @app.cli.command("init-db")
     def init_db():
@@ -40,4 +45,7 @@ app = create_app()
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    print("BASE_DIR:", BASE_DIR)
+    print("Template folder:", app.template_folder)
+    print("Static folder:", app.static_folder)
+    app.run(debug=False, host="0.0.0.0", port=5000)

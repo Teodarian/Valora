@@ -1,1 +1,27 @@
 .DS_Store
+
+# Python caches and test artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local Flask/runtime state
+instance/
+Vendera/instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Keep the app migration history, but ignore accidental root-level duplicates
+/migrations/
+
+# Environment files
+.env
+.env.*

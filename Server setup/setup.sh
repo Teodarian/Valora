@@ -2,128 +2,157 @@
 set -e
 
 # =============================================================================
-# Solvr — Server Setup Script
-# Setter opp Vendera og BottByrå på en fersk Ubuntu-server
-# Bruker: admin
+# Valora Server Setup Script
+# Setter opp Vendera og BottByra pa en fersk Ubuntu-server
+# Kjor som root eller med sudo
 # =============================================================================
 
-echo "=== Solvr server setup starter ==="
+REPO_DIR="/srv/Valora"
+REPO_URL="https://github.com/Teodarian/Valora.git"
+BRANCH="redesigned_vedera_hosted-_on_vercel_for_now"
+DEPLOY_USER="admin"
 
-# --- Systemoppdatering ---
+VENDERA_DIR="$REPO_DIR/Vendera"
+VENDERA_VENV="$VENDERA_DIR/venv"
+VENDERA_ENV_FILE="/etc/vendera.env"
+
+BOTTDIR="$REPO_DIR/botbyra-portfolio/Bottbyra-flask"
+BOTT_VENV="$BOTTDIR/venv"
+BOTT_ENV_FILE="/etc/bottbyra.env"
+
+echo "=== Valora server setup starter ==="
+
 echo "[1/8] Oppdaterer system..."
-apt update && apt upgrade -y
+apt update
+apt upgrade -y
 
-# --- Installer avhengigheter ---
 echo "[2/8] Installerer pakker..."
 apt install -y python3 python3-pip python3-venv git nginx ufw
 
-# --- Opprett admin-bruker hvis den ikke finnes ---
 echo "[3/8] Sjekker admin-bruker..."
-if ! id "admin" &>/dev/null; then
-    adduser --disabled-password --gecos "" admin
-    usermod -aG sudo admin
+if ! id "$DEPLOY_USER" &>/dev/null; then
+    adduser --disabled-password --gecos "" "$DEPLOY_USER"
+    usermod -aG sudo "$DEPLOY_USER"
     echo "admin-bruker opprettet."
 else
     echo "admin-bruker finnes allerede."
 fi
 
-# --- Klon repo ---
-echo "[4/8] Kloner GitHub-repo..."
-mkdir -p /srv/Valora
-cd /srv/Valora
+echo "[4/8] Henter Valora-repo..."
+mkdir -p "$REPO_DIR"
 
-if [ ! -d ".git" ]; then
-    git clone https://github.com/Teodarian/Valora.git .
-    git checkout redesigned_vedera_hosted-_on_vercel_for_now
+if [ ! -d "$REPO_DIR/.git" ]; then
+    git clone --branch "$BRANCH" "$REPO_URL" "$REPO_DIR"
 else
-    git pull
+    cd "$REPO_DIR"
+    git fetch origin
+    git checkout "$BRANCH"
+    git pull --ff-only origin "$BRANCH"
 fi
 
-chown -R admin:admin /srv/Valora
+chown -R "$DEPLOY_USER:$DEPLOY_USER" "$REPO_DIR"
 
-# --- Sett opp Vendera ---
 echo "[5/8] Setter opp Vendera..."
-cd /srv/Valora/Vendera
+cd "$VENDERA_DIR"
 python3 -m venv venv
-source venv/bin/activate
+source "$VENDERA_VENV/bin/activate"
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 deactivate
 
-# Init database
-cd /srv/Valora/Vendera
-source venv/bin/activate
-VENDERA_SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_hex(32))")
-flask --app app init-db
-deactivate
+mkdir -p "$VENDERA_DIR/instance"
+chown -R "$DEPLOY_USER:$DEPLOY_USER" "$VENDERA_DIR"
 
-# --- Sett opp BottByrå ---
-echo "[6/8] Setter opp BottByrå..."
-cd /srv/Valora/botbyra-portfolio/Bottbyra-flask
+VENDERA_SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_hex(32))")
+cat > "$VENDERA_ENV_FILE" <<EOF
+APP_ENV=development
+SECRET_KEY=$VENDERA_SECRET_KEY
+DATABASE_URL=sqlite:///$VENDERA_DIR/instance/vendera.db
+PREFERRED_URL_SCHEME=http
+RATELIMIT_STORAGE_URI=memory://
+EOF
+chmod 600 "$VENDERA_ENV_FILE"
+
+runuser -u "$DEPLOY_USER" -- bash -lc "cd '$REPO_DIR' && '$VENDERA_VENV/bin/python' -m flask --app Vendera:app db upgrade"
+
+echo "[6/8] Setter opp BottByra..."
+cd "$BOTTDIR"
 python3 -m venv venv
-source venv/bin/activate
+source "$BOTT_VENV/bin/activate"
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 deactivate
 
 BOTTBYRA_SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_hex(32))")
+cat > "$BOTT_ENV_FILE" <<EOF
+SECRET_KEY=$BOTTBYRA_SECRET_KEY
+EOF
+chmod 600 "$BOTT_ENV_FILE"
+chown -R "$DEPLOY_USER:$DEPLOY_USER" "$BOTTDIR"
 
-# --- Systemd-tjenester ---
 echo "[7/8] Oppretter systemd-tjenester..."
 
-cat > /etc/systemd/system/vendera.service << VENDERA
+cat > /etc/systemd/system/vendera.service <<EOF
 [Unit]
-Description=Vendera Flask App
+Description=Vendera Flask App (Waitress)
 After=network.target
 
 [Service]
-User=admin
-WorkingDirectory=/srv/Valora/Vendera
-Environment="PATH=/srv/Valora/Vendera/venv/bin"
-Environment="SECRET_KEY=${VENDERA_SECRET_KEY}"
-ExecStart=/srv/Valora/Vendera/venv/bin/python app.py
+User=$DEPLOY_USER
+WorkingDirectory=$REPO_DIR
+EnvironmentFile=$VENDERA_ENV_FILE
+Environment="PATH=$VENDERA_VENV/bin"
+ExecStart=$VENDERA_VENV/bin/python $REPO_DIR/serve.py
 Restart=always
+RestartSec=5
+KillSignal=SIGINT
 
 [Install]
 WantedBy=multi-user.target
-VENDERA
+EOF
 
-cat > /etc/systemd/system/bottbyra.service << BOTTBYRA
+cat > /etc/systemd/system/bottbyra.service <<EOF
 [Unit]
-Description=BottByraa Flask App
+Description=BottByra Flask App
 After=network.target
 
 [Service]
-User=admin
-WorkingDirectory=/srv/Valora/botbyra-portfolio/Bottbyra-flask
-Environment="PATH=/srv/Valora/botbyra-portfolio/Bottbyra-flask/venv/bin"
-Environment="SECRET_KEY=${BOTTBYRA_SECRET_KEY}"
-ExecStart=/srv/Valora/botbyra-portfolio/Bottbyra-flask/venv/bin/python app.py
+User=$DEPLOY_USER
+WorkingDirectory=$BOTTDIR
+EnvironmentFile=$BOTT_ENV_FILE
+Environment="PATH=$BOTT_VENV/bin"
+ExecStart=$BOTT_VENV/bin/python $BOTTDIR/app.py
 Restart=always
+RestartSec=5
+KillSignal=SIGINT
 
 [Install]
 WantedBy=multi-user.target
-BOTTBYRA
+EOF
 
 systemctl daemon-reload
 systemctl enable vendera bottbyra
-systemctl start vendera bottbyra
+systemctl restart vendera bottbyra
 
-# --- Nginx ---
 echo "[8/8] Konfigurerer Nginx..."
 
-cat > /etc/nginx/sites-available/vendera << NGINX_VENDERA
+cat > /etc/nginx/sites-available/vendera <<EOF
 server {
     listen 80;
     server_name _;
 
     location / {
-        proxy_pass http://127.0.0.1:5000;
+        proxy_pass http://127.0.0.1:8000;
         proxy_set_header Host \$host;
         proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_set_header X-Forwarded-Host \$host;
     }
 }
-NGINX_VENDERA
+EOF
 
-cat > /etc/nginx/sites-available/bottbyra << NGINX_BOTTBYRA
+cat > /etc/nginx/sites-available/bottbyra <<EOF
 server {
     listen 8080;
     server_name _;
@@ -132,27 +161,36 @@ server {
         proxy_pass http://127.0.0.1:5001;
         proxy_set_header Host \$host;
         proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_set_header X-Forwarded-Host \$host;
     }
 }
-NGINX_BOTTBYRA
+EOF
 
 ln -sf /etc/nginx/sites-available/vendera /etc/nginx/sites-enabled/vendera
 ln -sf /etc/nginx/sites-available/bottbyra /etc/nginx/sites-enabled/bottbyra
 rm -f /etc/nginx/sites-enabled/default
 
-# --- Brannmur ---
+nginx -t
+systemctl enable nginx
+systemctl reload nginx
+
 ufw allow OpenSSH
 ufw allow 80
 ufw allow 8080
 ufw --force enable
 
-systemctl reload nginx
-
 echo ""
-echo "=== Oppsett fullført ==="
+echo "=== Oppsett fullfort ==="
 echo "Vendera:  http://SERVER_IP"
-echo "BottByrå: http://SERVER_IP:8080"
+echo "BottByra: http://SERVER_IP:8080"
 echo ""
-echo "VIKTIG: Lagre disse SECRET_KEY-verdiene:"
-echo "Vendera SECRET_KEY:  ${VENDERA_SECRET_KEY}"
-echo "BottByrå SECRET_KEY: ${BOTTBYRA_SECRET_KEY}"
+echo "Miljofiler:"
+echo "  $VENDERA_ENV_FILE"
+echo "  $BOTT_ENV_FILE"
+echo ""
+echo "Merk:"
+echo "- Vendera kjores na via Waitress pa intern port 8000."
+echo "- Databasen opprettes/oppdateres via Flask-Migrate (db upgrade)."
+echo "- APP_ENV star til development til du har satt opp HTTPS."

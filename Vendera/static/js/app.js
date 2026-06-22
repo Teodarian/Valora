@@ -16,7 +16,6 @@ const defaultData = {
   user: {
     name: "",
     email: "",
-    password: "",
   },
   employees: [],
   contacts: [],
@@ -102,16 +101,125 @@ function cloneDefaultData() {
   return structuredClone(defaultData);
 }
 
+function getCookieValue(name) {
+  const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = document.cookie.match(new RegExp(`(?:^|; )${escapedName}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : "";
+}
+
 async function apiRequest(url, options = {}) {
+  const csrfToken = getCookieValue("vendera_csrf_token");
   const response = await fetch(url, {
     credentials: "same-origin",
-    headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-Token": csrfToken,
+      ...(options.headers || {}),
+    },
     ...options,
   });
   let responseData = {};
   try { responseData = await response.json(); } catch { responseData = {}; }
   if (!response.ok) throw new Error(responseData.error || "Noe gikk galt med serveren.");
   return responseData;
+}
+
+function hydrateSessionData(sessionData) {
+  const existingCompanyData = sessionData.company?.id
+    ? getCompanyById(sessionData.company.id)
+    : null;
+
+  data = migrateData({
+    ...cloneDefaultData(),
+    ...(existingCompanyData || {}),
+    company: {
+      ...defaultData.company,
+      ...((existingCompanyData && existingCompanyData.company) || {}),
+      ...(sessionData.company || {}),
+    },
+    user: {
+      ...defaultData.user,
+      ...((existingCompanyData && existingCompanyData.user) || {}),
+      ...(sessionData.user || {}),
+    },
+  });
+
+  data.employees = Array.isArray(sessionData.employees)
+    ? sessionData.employees.map((employee) => ({
+        ...employee,
+        email: employee.email || "",
+      }))
+    : [];
+  data.contacts = Array.isArray(sessionData.contacts)
+    ? sessionData.contacts.map((contact) => ({
+        ...contact,
+        contact: contact.contact || "",
+        email: contact.email || "",
+        phone: contact.phone || "",
+        notes: contact.notes || "",
+      }))
+    : [];
+  data.products = Array.isArray(sessionData.products)
+    ? sessionData.products.map((product) => ({
+        ...product,
+        description: product.description || "",
+        category: product.category || "",
+        price: Number(product.price || 0),
+        cost: Number(product.cost || 0),
+        stock: Number(product.stock || 0),
+      }))
+    : [];
+  data.purchases = Array.isArray(sessionData.purchases)
+    ? sessionData.purchases.map((purchase) => ({
+        ...purchase,
+        amount: Number(purchase.amount || 0),
+        date: purchase.date || getToday(),
+      }))
+    : [];
+  data.sponsors = Array.isArray(sessionData.sponsors)
+    ? sessionData.sponsors.map((sponsor) => ({
+        ...sponsor,
+        value: Number(sponsor.value || 0),
+      }))
+    : [];
+  data.budget = sessionData.budget
+    ? {
+        expectedSales: Number(sessionData.budget.expectedSales || 0),
+        expectedSponsors: Number(sessionData.budget.expectedSponsors || 0),
+        expectedPurchases: Number(sessionData.budget.expectedPurchases || 0),
+        expectedOtherCosts: Number(sessionData.budget.expectedOtherCosts || 0),
+      }
+    : { ...defaultData.budget };
+  data.sales = Array.isArray(sessionData.sales)
+    ? sessionData.sales.map((sale) => ({
+        ...sale,
+        quantity: Number(sale.quantity || 0),
+        price: Number(sale.price || 0),
+        total: Number(sale.total || 0),
+        status: sale.status || "Betalt",
+        date: sale.date || getToday(),
+      }))
+    : [];
+  relinkAllTransactionsToContacts();
+  data.isLoggedIn = true;
+  saveData();
+}
+
+async function syncSessionFromServer() {
+  const sessionData = await apiRequest("/api/me", { method: "GET" });
+  hydrateSessionData(sessionData);
+  return sessionData;
+}
+
+function mergeServerProducts(products = []) {
+  if (!Array.isArray(products) || products.length === 0) {
+    return;
+  }
+
+  data.products = data.products.map((product) => {
+    const updatedProduct = products.find((candidate) => candidate.id === product.id);
+    return updatedProduct ? { ...updatedProduct } : product;
+  });
 }
 
 function loadRegistry() {
@@ -251,6 +359,8 @@ function migrateData(loadedData) {
     loadedData.user = { ...defaultData.user };
   }
 
+  delete loadedData.user.password;
+
   if (!Array.isArray(loadedData.employees)) loadedData.employees = [];
   if (!Array.isArray(loadedData.contacts)) loadedData.contacts = [];
   if (!Array.isArray(loadedData.products)) loadedData.products = [];
@@ -370,20 +480,29 @@ function saveData() {
     data.company.id = createId();
   }
 
+  const persistedData = structuredClone(data);
+  persistedData.isLoggedIn = false;
+
+  if (!persistedData.user) {
+    persistedData.user = {};
+  }
+
+  delete persistedData.user.password;
+
   const existingIndex = registry.findIndex(
     (entry) => entry.company.id === data.company.id
   );
 
   if (existingIndex >= 0) {
-    registry[existingIndex] = data;
+    registry[existingIndex] = persistedData;
   } else {
-    registry.push(data);
+    registry.push(persistedData);
   }
 
   saveRegistry();
   setActiveCompanyId(data.company.id);
 
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(persistedData));
 }
 
 function showOnly(screen) {
@@ -461,12 +580,59 @@ function findOrCreateContact(name, type = "Kunde") {
   return findOrCreateContactInData(data, name, type);
 }
 
+function idsMatch(left, right) {
+  return String(left || "") === String(right || "");
+}
+
 function getContactById(contactId) {
-  return data.contacts.find((contact) => contact.id === contactId);
+  return data.contacts.find((contact) => idsMatch(contact.id, contactId));
 }
 
 function getProductById(productId) {
-  return data.products.find((product) => product.id === productId);
+  return data.products.find((product) => idsMatch(product.id, productId));
+}
+
+function relinkTransactionsForContact(contact) {
+  if (!contact || !contact.name) {
+    return;
+  }
+
+  data.sales.forEach((sale) => {
+    if (!sale.contactId && normalizeName(sale.customerName) === normalizeName(contact.name)) {
+      sale.contactId = contact.id;
+    }
+  });
+
+  data.purchases.forEach((purchase) => {
+    if (!purchase.contactId && normalizeName(purchase.supplierName) === normalizeName(contact.name)) {
+      purchase.contactId = contact.id;
+    }
+  });
+}
+
+function relinkAllTransactionsToContacts() {
+  data.contacts.forEach((contact) => {
+    relinkTransactionsForContact(contact);
+  });
+}
+
+function syncSaleProductFields(productId) {
+  const saleForm = document.querySelector("#sale-form");
+
+  if (!saleForm) {
+    return;
+  }
+
+  const product = getProductById(productId);
+
+  if (!product) {
+    saleForm.elements.product.value = "";
+    saleForm.elements.price.value = "";
+    return;
+  }
+
+  saleForm.elements.product.value = product.name || "";
+  saleForm.elements.price.value = Number(product.price || 0);
 }
 
 function createEmptyRow(colspan, text) {
@@ -875,22 +1041,22 @@ function deleteContact(contactId) {
   }
 
   data.sales.forEach((sale) => {
-    if (sale.contactId === contactId) {
+    if (idsMatch(sale.contactId, contactId)) {
       sale.contactId = "";
       sale.customerName = contact.name;
     }
   });
 
   data.purchases.forEach((purchase) => {
-    if (purchase.contactId === contactId) {
+    if (idsMatch(purchase.contactId, contactId)) {
       purchase.contactId = "";
       purchase.supplierName = contact.name;
     }
   });
 
-  data.contacts = data.contacts.filter((item) => item.id !== contactId);
+  data.contacts = data.contacts.filter((item) => !idsMatch(item.id, contactId));
 
-  if (editState.contactId === contactId) {
+  if (idsMatch(editState.contactId, contactId)) {
     cancelEditContact();
   }
 
@@ -906,9 +1072,9 @@ function openContactDetails(contactId) {
     return;
   }
 
-  const contactSales = data.sales.filter((sale) => sale.contactId === contactId);
+  const contactSales = data.sales.filter((sale) => idsMatch(sale.contactId, contactId));
   const contactPurchases = data.purchases.filter(
-    (purchase) => purchase.contactId === contactId
+    (purchase) => idsMatch(purchase.contactId, contactId)
   );
 
   const totalSales = contactSales.reduce(
@@ -1121,6 +1287,7 @@ function renderProductOptions() {
   });
 
   select.value = currentValue;
+  syncSaleProductFields(select.value);
 }
 
 function renderSales() {
@@ -1188,7 +1355,10 @@ function startEditSale(saleId) {
 
   form.elements.customer.value = sale.customerName;
   form.elements.productId.value = sale.productId || "";
-  form.elements.product.value = sale.product;
+  syncSaleProductFields(sale.productId);
+  if (!sale.productId) {
+    form.elements.product.value = sale.product;
+  }
   form.elements.quantity.value = sale.quantity;
   form.elements.price.value = sale.price;
   form.elements.status.value = sale.status;
@@ -1519,10 +1689,14 @@ function openDeleteCompanyPanel(companyId) {
 
   document.querySelector("#delete-company-panel").classList.remove("hidden");
   document.querySelector("#delete-company-confirm-input").value = "";
+  const isActiveCompany = getActiveCompanyId() === companyId && data.isLoggedIn;
+  const deleteWarningText = isActiveCompany
+    ? "Dette vil slette elevbedriften fra serveren og logge deg ut. Handlingen kan ikke angres."
+    : "Dette kan ikke angres i prototypen.";
 
   document.querySelector("#delete-company-text").innerHTML = `
     Du er i ferd med å slette <strong>${companyEntry.company.name}</strong>.<br>
-    Dette kan ikke angres i prototypen.
+    ${deleteWarningText}
   `;
 }
 
@@ -1554,19 +1728,38 @@ function deleteSelectedCompany() {
     return;
   }
 
-  registry = registry.filter((entry) => entry.company.id !== companyToDeleteId);
+  const isActiveCompany = getActiveCompanyId() === companyToDeleteId && data.isLoggedIn;
 
-  saveRegistry();
-
-  if (getActiveCompanyId() === companyToDeleteId) {
-    clearActiveCompanyId();
-    data = cloneDefaultData();
+  if (!isActiveCompany) {
+    registry = registry.filter((entry) => entry.company.id !== companyToDeleteId);
+    saveRegistry();
+    hideDeleteCompanyPanel();
+    renderAdminCompanies();
+    alert("Elevbedriften er slettet fra prototypen.");
+    return;
   }
 
-  hideDeleteCompanyPanel();
-  renderAdminCompanies();
+  (async () => {
+    try {
+      await apiRequest("/api/company", {
+        method: "DELETE",
+        body: JSON.stringify({
+          confirmationName: confirmationInput,
+        }),
+      });
 
-  alert("Elevbedriften er slettet fra prototypen.");
+      registry = registry.filter((entry) => entry.company.id !== companyToDeleteId);
+      saveRegistry();
+      clearActiveCompanyId();
+      data = cloneDefaultData();
+      hideDeleteCompanyPanel();
+      renderAdminCompanies();
+      showOnly(welcomeScreen);
+      alert("Elevbedriften er slettet.");
+    } catch (err) {
+      alert(err.message);
+    }
+  })();
 }
 
 document.querySelector("#show-login-btn").addEventListener("click", () => {
@@ -1601,53 +1794,6 @@ document.querySelector("#back-from-register").addEventListener("click", () => {
 document.querySelector("#back-from-admin").addEventListener("click", () => {
   hideDeleteCompanyPanel();
   showOnly(welcomeScreen);
-});
-
-document.querySelector("#register-form").addEventListener("submit", async (event) => {
-  event.preventDefault();
-  try {
-    const result = await apiRequest("/api/register", {
-      method: "POST",
-      body: JSON.stringify({
-        companyName: document.querySelector("#company-name").value.trim(),
-        school: document.querySelector("#company-school").value.trim(),
-        userName: document.querySelector("#ceo-name").value.trim(),
-        email: document.querySelector("#register-email").value.trim(),
-        password: document.querySelector("#register-password").value,
-      }),
-    });
-    data = cloneDefaultData();
-    data.company = { ...data.company, ...result.company };
-    data.user = { ...data.user, ...result.user };
-    data.isLoggedIn = true;
-    saveData();
-    event.target.reset();
-    showApp();
-  } catch (err) {
-    alert(err.message);
-  }
-});
-
-document.querySelector("#login-form").addEventListener("submit", async (event) => {
-  event.preventDefault();
-  try {
-    const result = await apiRequest("/api/login", {
-      method: "POST",
-      body: JSON.stringify({
-        email: document.querySelector("#login-email").value.trim(),
-        password: document.querySelector("#login-password").value,
-      }),
-    });
-    data = cloneDefaultData();
-    data.company = { ...data.company, ...result.company };
-    data.user = { ...data.user, ...result.user };
-    data.isLoggedIn = true;
-    saveData();
-    event.target.reset();
-    showApp();
-  } catch (err) {
-    alert(err.message);
-  }
 });
 
 document.querySelector("#logout-btn").addEventListener("click", async () => {
@@ -1718,41 +1864,44 @@ document.querySelector("#contact-form").addEventListener("submit", (event) => {
       contact.contact = formData.get("contact");
       contact.email = formData.get("email");
       contact.phone = formData.get("phone");
+      relinkTransactionsForContact(contact);
 
       data.sales.forEach((sale) => {
-        if (sale.contactId === contact.id && sale.customerName === oldName) {
+        if (idsMatch(sale.contactId, contact.id) && sale.customerName === oldName) {
           sale.customerName = contact.name;
         }
       });
 
       data.purchases.forEach((purchase) => {
-        if (purchase.contactId === contact.id && purchase.supplierName === oldName) {
+        if (idsMatch(purchase.contactId, contact.id) && purchase.supplierName === oldName) {
           purchase.supplierName = contact.name;
         }
       });
     }
 
     clearEditMode("contact");
-  } else {
-    let contact = findContactByName(name);
-
-    if (contact) {
-      contact.type = formData.get("type");
-      contact.contact = formData.get("contact");
-      contact.email = formData.get("email");
-      contact.phone = formData.get("phone");
     } else {
-      data.contacts.push({
-        id: createId(),
-        name,
-        type: formData.get("type"),
-        contact: formData.get("contact"),
-        email: formData.get("email"),
-        phone: formData.get("phone"),
-        notes: "",
-      });
+      let contact = findContactByName(name);
+
+      if (contact) {
+        contact.type = formData.get("type");
+        contact.contact = formData.get("contact");
+        contact.email = formData.get("email");
+        contact.phone = formData.get("phone");
+        relinkTransactionsForContact(contact);
+      } else {
+        data.contacts.push({
+          id: createId(),
+          name,
+          type: formData.get("type"),
+          contact: formData.get("contact"),
+          email: formData.get("email"),
+          phone: formData.get("phone"),
+          notes: "",
+        });
+        relinkTransactionsForContact(data.contacts[data.contacts.length - 1]);
+      }
     }
-  }
 
   saveData();
   event.target.reset();
@@ -1803,15 +1952,7 @@ document.querySelector("#product-form").addEventListener("submit", (event) => {
 });
 
 document.querySelector("#sale-product-select").addEventListener("change", (event) => {
-  const product = getProductById(event.target.value);
-  const saleForm = document.querySelector("#sale-form");
-
-  if (!product || !saleForm) {
-    return;
-  }
-
-  saleForm.elements.product.value = product.name;
-  saleForm.elements.price.value = product.price;
+  syncSaleProductFields(event.target.value);
 });
 
 document.querySelector("#sale-form").addEventListener("submit", (event) => {
@@ -1977,18 +2118,6 @@ document.querySelector("#sponsor-form").addEventListener("submit", (event) => {
   renderAll();
 });
 
-document.querySelector("#settings-form").addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  data.company.name = document.querySelector("#settings-company-name").value;
-  data.company.school = document.querySelector("#settings-company-school").value;
-
-  saveData();
-  renderAll();
-
-  alert("Innstillinger lagret.");
-});
-
 document.querySelector("#generate-report-btn").addEventListener("click", () => {
   renderReport();
 });
@@ -2062,15 +2191,636 @@ document
   }
 });
 
-if (getActiveCompanyId()) {
-  const activeCompany = getCompanyById(getActiveCompanyId());
+deleteEmployee = function deleteEmployeeServerBacked(employeeId) {
+  return (async () => {
+    if (!confirmDelete("Er du sikker pÃ¥ at du vil slette denne ansatte?")) return;
 
-  if (activeCompany && activeCompany.isLoggedIn) {
+    try {
+      await apiRequest(`/api/employees/${employeeId}`, { method: "DELETE" });
+      data.employees = data.employees.filter((employee) => employee.id !== employeeId);
+
+      if (editState.employeeId === employeeId) {
+        cancelEditEmployee();
+      }
+
+      saveData();
+      renderAll();
+    } catch (err) {
+      alert(err.message);
+    }
+  })();
+};
+
+document.querySelector("#register-form").addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    try {
+      const result = await apiRequest("/api/register", {
+        method: "POST",
+        body: JSON.stringify({
+          companyName: document.querySelector("#company-name").value.trim(),
+          school: document.querySelector("#company-school").value.trim(),
+          userName: document.querySelector("#ceo-name").value.trim(),
+          email: document.querySelector("#register-email").value.trim(),
+          password: document.querySelector("#register-password").value,
+        }),
+      });
+
+      hydrateSessionData(result);
+      event.target.reset();
+      showApp();
+    } catch (err) {
+      alert(err.message);
+    }
+  },
+  true
+);
+
+document.querySelector("#login-form").addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    try {
+      const result = await apiRequest("/api/login", {
+        method: "POST",
+        body: JSON.stringify({
+          email: document.querySelector("#login-email").value.trim(),
+          password: document.querySelector("#login-password").value,
+        }),
+      });
+
+      hydrateSessionData(result);
+      event.target.reset();
+      showApp();
+    } catch (err) {
+      alert(err.message);
+    }
+  },
+  true
+);
+
+document.querySelector("#employee-form").addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const formData = new FormData(event.target);
+    const employeePayload = {
+      name: String(formData.get("name") || "").trim(),
+      role: String(formData.get("role") || "").trim(),
+      email: String(formData.get("email") || "").trim(),
+    };
+
+    try {
+      if (editState.employeeId) {
+        const result = await apiRequest(`/api/employees/${editState.employeeId}`, {
+          method: "PUT",
+          body: JSON.stringify(employeePayload),
+        });
+
+        data.employees = data.employees.map((employee) =>
+          employee.id === editState.employeeId ? result.employee : employee
+        );
+        clearEditMode("employee");
+      } else {
+        const result = await apiRequest("/api/employees", {
+          method: "POST",
+          body: JSON.stringify(employeePayload),
+        });
+
+        data.employees.push(result.employee);
+      }
+
+      saveData();
+      event.target.reset();
+      renderAll();
+    } catch (err) {
+      alert(err.message);
+    }
+  },
+  true
+);
+
+deleteContact = function deleteContactServerBacked(contactId) {
+  return (async () => {
+    const contact = getContactById(contactId);
+
+    if (!contact) return;
+
+    if (
+      !confirmDelete(
+        `Er du sikker pa at du vil slette kontakten "${contact.name}"? Gamle salg og innkjop beholdes, men koblingen til kontakten fjernes.`
+      )
+    ) {
+      return;
+    }
+
+    try {
+      await apiRequest(`/api/contacts/${contactId}`, { method: "DELETE" });
+
+      data.sales.forEach((sale) => {
+        if (idsMatch(sale.contactId, contactId)) {
+          sale.contactId = "";
+          sale.customerName = contact.name;
+        }
+      });
+
+      data.purchases.forEach((purchase) => {
+        if (idsMatch(purchase.contactId, contactId)) {
+          purchase.contactId = "";
+          purchase.supplierName = contact.name;
+        }
+      });
+
+      data.contacts = data.contacts.filter((item) => !idsMatch(item.id, contactId));
+
+      if (idsMatch(editState.contactId, contactId)) {
+        cancelEditContact();
+      }
+
+      saveData();
+      renderAll();
+    } catch (err) {
+      alert(err.message);
+    }
+  })();
+};
+
+document.querySelector("#contact-form").addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const formData = new FormData(event.target);
+    const name = String(formData.get("name") || "").trim();
+
+    if (!name) {
+      alert("Kontakten ma ha et navn.");
+      return;
+    }
+
+    const contactPayload = {
+      name,
+      type: String(formData.get("type") || "").trim(),
+      contact: String(formData.get("contact") || "").trim(),
+      email: String(formData.get("email") || "").trim(),
+      phone: String(formData.get("phone") || "").trim(),
+      notes: "",
+    };
+
+    try {
+      if (editState.contactId) {
+        const oldContact = getContactById(editState.contactId);
+        const oldName = oldContact ? oldContact.name : "";
+        const result = await apiRequest(`/api/contacts/${editState.contactId}`, {
+          method: "PUT",
+          body: JSON.stringify(contactPayload),
+        });
+
+        data.contacts = data.contacts.map((contact) =>
+          idsMatch(contact.id, editState.contactId) ? result.contact : contact
+        );
+        relinkTransactionsForContact(result.contact);
+
+        if (oldContact) {
+          data.sales.forEach((sale) => {
+            if (idsMatch(sale.contactId, oldContact.id) && sale.customerName === oldName) {
+              sale.customerName = result.contact.name;
+            }
+          });
+
+          data.purchases.forEach((purchase) => {
+            if (idsMatch(purchase.contactId, oldContact.id) && purchase.supplierName === oldName) {
+              purchase.supplierName = result.contact.name;
+            }
+          });
+        }
+
+        clearEditMode("contact");
+      } else {
+        const existingContact = findContactByName(name);
+
+        if (existingContact) {
+          const result = await apiRequest(`/api/contacts/${existingContact.id}`, {
+            method: "PUT",
+            body: JSON.stringify(contactPayload),
+          });
+
+          data.contacts = data.contacts.map((contact) =>
+            idsMatch(contact.id, existingContact.id) ? result.contact : contact
+          );
+          relinkTransactionsForContact(result.contact);
+        } else {
+          const result = await apiRequest("/api/contacts", {
+            method: "POST",
+            body: JSON.stringify(contactPayload),
+          });
+
+          data.contacts.push(result.contact);
+          relinkTransactionsForContact(result.contact);
+        }
+      }
+
+      saveData();
+      event.target.reset();
+      renderAll();
+    } catch (err) {
+      alert(err.message);
+    }
+  },
+  true
+);
+
+deleteProduct = function deleteProductServerBacked(productId) {
+  return (async () => {
+    const product = getProductById(productId);
+
+    if (!product) return;
+
+    if (
+      !confirmDelete(
+        `Er du sikker pa at du vil slette produktet "${product.name}"? Gamle salg beholdes som historikk.`
+      )
+    ) {
+      return;
+    }
+
+    try {
+      await apiRequest(`/api/products/${productId}`, { method: "DELETE" });
+
+      data.sales.forEach((sale) => {
+        if (sale.productId === productId) {
+          sale.productId = "";
+        }
+      });
+
+      data.products = data.products.filter((item) => item.id !== productId);
+
+      if (editState.productId === productId) {
+        cancelEditProduct();
+      }
+
+      saveData();
+      renderAll();
+    } catch (err) {
+      alert(err.message);
+    }
+  })();
+};
+
+document.querySelector("#product-form").addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const formData = new FormData(event.target);
+    const productPayload = {
+      name: String(formData.get("name") || "").trim(),
+      description: String(formData.get("description") || "").trim(),
+      category: String(formData.get("category") || "").trim(),
+      price: Number(formData.get("price") || 0),
+      cost: Number(formData.get("cost") || 0),
+      stock: Number(formData.get("stock") || 0),
+    };
+
+    try {
+      if (editState.productId) {
+        const result = await apiRequest(`/api/products/${editState.productId}`, {
+          method: "PUT",
+          body: JSON.stringify(productPayload),
+        });
+
+        data.products = data.products.map((product) =>
+          product.id === editState.productId ? result.product : product
+        );
+
+        data.sales.forEach((sale) => {
+          if (sale.productId === result.product.id) {
+            sale.product = result.product.name;
+            sale.price = Number(result.product.price || 0);
+            sale.total = Number(sale.quantity || 0) * Number(result.product.price || 0);
+          }
+        });
+
+        clearEditMode("product");
+      } else {
+        const result = await apiRequest("/api/products", {
+          method: "POST",
+          body: JSON.stringify(productPayload),
+        });
+
+        data.products.push(result.product);
+      }
+
+      saveData();
+      event.target.reset();
+      renderAll();
+    } catch (err) {
+      alert(err.message);
+    }
+  },
+  true
+);
+
+deleteSale = function deleteSaleServerBacked(saleId) {
+  return (async () => {
+    const sale = data.sales.find((item) => item.id === saleId);
+
+    if (!sale) return;
+
+    if (!confirmDelete("Er du sikker pa at du vil slette dette salget?")) return;
+
+    try {
+      const result = await apiRequest(`/api/sales/${saleId}`, { method: "DELETE" });
+      data.sales = data.sales.filter((item) => item.id !== saleId);
+      mergeServerProducts(result.products);
+
+      if (editState.saleId === saleId) {
+        cancelEditSale();
+      }
+
+      saveData();
+      renderAll();
+    } catch (err) {
+      alert(err.message);
+    }
+  })();
+};
+
+document.querySelector("#sale-form").addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const formData = new FormData(event.target);
+    const selectedProductId = formData.get("productId");
+    const selectedProduct = getProductById(selectedProductId);
+    const productName =
+      selectedProduct?.name || String(formData.get("product") || "").trim();
+
+    if (!productName) {
+      alert("Produkt/tjeneste ma fylles inn eller velges.");
+      return;
+    }
+
+    const salePayload = {
+      customerName: String(formData.get("customer") || "").trim(),
+      contactId: "",
+      productId: selectedProductId || "",
+      product: productName,
+      quantity: Number(formData.get("quantity") || 0),
+      price: Number(formData.get("price") || 0),
+      status: String(formData.get("status") || "").trim(),
+    };
+
+    try {
+      if (editState.saleId) {
+        const result = await apiRequest(`/api/sales/${editState.saleId}`, {
+          method: "PUT",
+          body: JSON.stringify(salePayload),
+        });
+
+        data.sales = data.sales.map((sale) =>
+          sale.id === editState.saleId ? result.sale : sale
+        );
+        mergeServerProducts(result.products);
+        clearEditMode("sale");
+      } else {
+        const result = await apiRequest("/api/sales", {
+          method: "POST",
+          body: JSON.stringify(salePayload),
+        });
+
+        data.sales.push(result.sale);
+        mergeServerProducts(result.products);
+      }
+
+      saveData();
+      event.target.reset();
+      renderAll();
+    } catch (err) {
+      alert(err.message);
+    }
+  },
+  true
+);
+
+deletePurchase = function deletePurchaseServerBacked(purchaseId) {
+  return (async () => {
+    if (!confirmDelete("Er du sikker pa at du vil slette dette innkjopet?")) return;
+
+    try {
+      await apiRequest(`/api/purchases/${purchaseId}`, { method: "DELETE" });
+      data.purchases = data.purchases.filter((item) => item.id !== purchaseId);
+
+      if (editState.purchaseId === purchaseId) {
+        cancelEditPurchase();
+      }
+
+      saveData();
+      renderAll();
+    } catch (err) {
+      alert(err.message);
+    }
+  })();
+};
+
+document.querySelector("#purchase-form").addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const formData = new FormData(event.target);
+    const purchasePayload = {
+      supplierName: String(formData.get("supplier") || "").trim(),
+      contactId: "",
+      description: String(formData.get("description") || "").trim(),
+      category: String(formData.get("category") || "").trim(),
+      amount: Number(formData.get("amount") || 0),
+    };
+
+    try {
+      if (editState.purchaseId) {
+        const result = await apiRequest(`/api/purchases/${editState.purchaseId}`, {
+          method: "PUT",
+          body: JSON.stringify(purchasePayload),
+        });
+
+        data.purchases = data.purchases.map((purchase) =>
+          purchase.id === editState.purchaseId ? result.purchase : purchase
+        );
+        clearEditMode("purchase");
+      } else {
+        const result = await apiRequest("/api/purchases", {
+          method: "POST",
+          body: JSON.stringify(purchasePayload),
+        });
+
+        data.purchases.push(result.purchase);
+      }
+
+      saveData();
+      event.target.reset();
+      renderAll();
+    } catch (err) {
+      alert(err.message);
+    }
+  },
+  true
+);
+
+document.querySelector("#budget-form").addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const budgetPayload = {
+      expectedSales: Number(document.querySelector("#budget-expected-sales").value || 0),
+      expectedSponsors: Number(document.querySelector("#budget-expected-sponsors").value || 0),
+      expectedPurchases: Number(document.querySelector("#budget-expected-purchases").value || 0),
+      expectedOtherCosts: Number(document.querySelector("#budget-expected-other-costs").value || 0),
+    };
+
+    try {
+      const result = await apiRequest("/api/budget", {
+        method: "PUT",
+        body: JSON.stringify(budgetPayload),
+      });
+
+      data.budget = { ...result.budget };
+      saveData();
+      renderAll();
+      alert("Budsjett lagret.");
+    } catch (err) {
+      alert(err.message);
+    }
+  },
+  true
+);
+
+deleteSponsor = function deleteSponsorServerBacked(sponsorId) {
+  return (async () => {
+    if (!confirmDelete("Er du sikker pa at du vil slette denne sponsoren?")) return;
+
+    try {
+      await apiRequest(`/api/sponsors/${sponsorId}`, { method: "DELETE" });
+      data.sponsors = data.sponsors.filter((item) => item.id !== sponsorId);
+
+      if (editState.sponsorId === sponsorId) {
+        cancelEditSponsor();
+      }
+
+      saveData();
+      renderAll();
+    } catch (err) {
+      alert(err.message);
+    }
+  })();
+};
+
+document.querySelector("#sponsor-form").addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const formData = new FormData(event.target);
+    const sponsorPayload = {
+      name: String(formData.get("name") || "").trim(),
+      type: String(formData.get("type") || "").trim(),
+      value: Number(formData.get("value") || 0),
+    };
+
+    try {
+      if (editState.sponsorId) {
+        const result = await apiRequest(`/api/sponsors/${editState.sponsorId}`, {
+          method: "PUT",
+          body: JSON.stringify(sponsorPayload),
+        });
+
+        data.sponsors = data.sponsors.map((sponsor) =>
+          sponsor.id === editState.sponsorId ? result.sponsor : sponsor
+        );
+        clearEditMode("sponsor");
+      } else {
+        const result = await apiRequest("/api/sponsors", {
+          method: "POST",
+          body: JSON.stringify(sponsorPayload),
+        });
+
+        data.sponsors.push(result.sponsor);
+      }
+
+      saveData();
+      event.target.reset();
+      renderAll();
+    } catch (err) {
+      alert(err.message);
+    }
+  },
+  true
+);
+
+document.querySelector("#settings-form").addEventListener(
+  "submit",
+  async (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const companyPayload = {
+      name: String(document.querySelector("#settings-company-name").value || "").trim(),
+      school: String(document.querySelector("#settings-company-school").value || "").trim(),
+    };
+
+    try {
+      const result = await apiRequest("/api/company", {
+        method: "PUT",
+        body: JSON.stringify(companyPayload),
+      });
+
+      data.company = {
+        ...data.company,
+        ...result.company,
+      };
+      saveData();
+      renderAll();
+      alert("Innstillinger lagret.");
+    } catch (err) {
+      alert(err.message);
+    }
+  },
+  true
+);
+
+async function initializeApp() {
+  const activeCompanyId = getActiveCompanyId();
+  const activeCompany = activeCompanyId ? getCompanyById(activeCompanyId) : null;
+
+  if (activeCompany) {
     data = migrateData(activeCompany);
-    showApp();
-  } else {
-    showOnly(welcomeScreen);
   }
-} else {
+
+  try {
+    await syncSessionFromServer();
+    showApp();
+    return;
+  } catch {
+    data = cloneDefaultData();
+    clearActiveCompanyId();
+  }
+
   showOnly(welcomeScreen);
 }
+
+initializeApp();

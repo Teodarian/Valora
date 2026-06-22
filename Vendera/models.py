@@ -1,5 +1,9 @@
 from werkzeug.security import generate_password_hash, check_password_hash
-from extensions import db
+
+try:
+    from .extensions import db
+except ImportError:
+    from extensions import db
 
 
 class Company(db.Model):

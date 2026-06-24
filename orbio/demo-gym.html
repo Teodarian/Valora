@@ -32,9 +32,43 @@
     }
 
     /* ── NAV ── */
-    nav {
+    /* ── DEMO BAR ── */
+    .demo-bar {
       position: fixed;
       top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: 36px;
+      background: var(--yellow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+
+    .demo-bar a {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #0a0a0a;
+      text-decoration: none;
+    }
+
+    .demo-bar a:hover { text-decoration: underline; }
+
+    .demo-bar-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(10,10,10,0.5);
+    }
+
+    nav {
+      position: fixed;
+      top: 36px; left: 0; right: 0;
       z-index: 100;
       display: flex;
       justify-content: space-between;
@@ -652,6 +686,12 @@
   </style>
 </head>
 <body>
+
+  <!-- DEMO BAR -->
+  <div class="demo-bar">
+    <a href="index.html">← Tilbake til Orbio</a>
+    <span class="demo-bar-label">Demo</span>
+  </div>
 
   <!-- NAV -->
   <nav>

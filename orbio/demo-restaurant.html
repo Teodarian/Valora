@@ -34,44 +34,10 @@
       overflow-x: hidden;
     }
 
-    /* ── DEMO BAR ── */
-    .demo-bar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 200;
-      height: 36px;
-      background: var(--terra);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-    }
-
-    .demo-bar a {
-      font-family: 'Manrope', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #f1e0ce;
-      text-decoration: none;
-    }
-
-    .demo-bar a:hover { text-decoration: underline; }
-
-    .demo-bar-label {
-      font-family: 'Manrope', sans-serif;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(241,224,206,0.55);
-    }
-
     /* ── NAV ── */
     nav {
       position: fixed;
-      top: 36px; left: 0; right: 0;
+      top: 0; left: 0; right: 0;
       z-index: 100;
       display: flex;
       justify-content: space-between;
@@ -138,19 +104,7 @@
       position: relative;
       border-bottom: 1px solid var(--outline);
       overflow: hidden;
-      background-image: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1600&q=80');
-      background-size: cover;
-      background-position: center;
     }
-
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to right, rgba(26,18,8,0.95) 45%, rgba(26,18,8,0.55) 100%);
-      z-index: 0;
-    }
-
-    .hero > *:not(.hero-overlay) { position: relative; z-index: 1; }
 
     /* Warm glow accent */
     .hero::after {
@@ -289,18 +243,6 @@
       gap: 0;
       border: 1px solid var(--outline);
     }
-
-    .menu-img {
-      width: calc(100% + 88px);
-      margin: -40px -44px 32px;
-      aspect-ratio: 3/2;
-      object-fit: cover;
-      display: block;
-      opacity: 0.88;
-      transition: opacity 0.3s;
-    }
-
-    .menu-item:hover .menu-img { opacity: 1; }
 
     .menu-item {
       padding: 40px 44px;
@@ -732,26 +674,19 @@
 </head>
 <body>
 
-  <!-- DEMO BAR -->
-  <div class="demo-bar">
-    <a href="index.html">← Tilbake til Orbio</a>
-    <span class="demo-bar-label">Demo</span>
-  </div>
-
   <!-- NAV -->
   <nav>
     <a href="#" class="nav-logo">Brasa</a>
     <ul class="nav-links">
       <li><a href="#meny">Meny</a></li>
       <li><a href="#om">Om oss</a></li>
-      <li><a href="booking-restaurant.html">Reserver</a></li>
+      <li><a href="#chat">Reserver</a></li>
     </ul>
-    <a href="booking-restaurant.html" class="nav-reserve">Reserver bord</a>
+    <a href="#chat" class="nav-reserve">Reserver bord</a>
   </nav>
 
   <!-- HERO -->
   <div class="hero">
-    <div class="hero-overlay"></div>
     <p class="hero-label">Restaurant — Oslo</p>
     <h1 class="hero-headline">
       Smaken av<br><em>det aller beste</em><br>Oslo har å by på.
@@ -761,7 +696,7 @@
       Brasa er en intim og varm restaurant i Oslo sentrum. Vi serverer nordisk mat med søreuropeisk sjel — lagd med sesongens råvarer fra norske produsenter.
     </p>
     <div class="hero-actions">
-      <a href="booking-restaurant.html" class="btn-terra">Reserver bord</a>
+      <a href="#chat" class="btn-terra">Reserver bord</a>
       <a href="#meny" class="btn-ghost-warm">Se menyen</a>
     </div>
   </div>
@@ -773,7 +708,6 @@
 
     <div class="menu-grid reveal">
       <div class="menu-item">
-        <img class="menu-img" src="https://images.unsplash.com/photo-1676471926534-d5c9771909fa?auto=format&fit=crop&w=700&q=80" alt="Kamskjell" />
         <div class="menu-course">Forrett</div>
         <div class="menu-name">Kamskjell med ertepuré</div>
         <p class="menu-desc">Ferske norske kamskjell, kremete ertepuré med mynte, sprø bacon og sitronsmør. Servert med ristet surdeigsbrød.</p>
@@ -783,7 +717,6 @@
         </div>
       </div>
       <div class="menu-item">
-        <img class="menu-img" src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=700&q=80" alt="Tartar av hjort" />
         <div class="menu-course">Forrett</div>
         <div class="menu-name">Tartar av hjort</div>
         <p class="menu-desc">Håndskåret hjortetartar fra Valdres, smaksatt med sennep, kapers og eggeplomme. Garnityr av tørkede urter.</p>
@@ -793,7 +726,6 @@
         </div>
       </div>
       <div class="menu-item">
-        <img class="menu-img" src="https://images.unsplash.com/photo-1515668236457-83c3b8764839?auto=format&fit=crop&w=700&q=80" alt="Braisert lammeskank" />
         <div class="menu-course">Hovedrett</div>
         <div class="menu-name">Braisert lammeskank</div>
         <p class="menu-desc">24-timers braisert lammeskank fra Hardanger, rotgrønnsaker, rødvinsaus og potetpuré med rosmarin.</p>
@@ -803,7 +735,6 @@
         </div>
       </div>
       <div class="menu-item">
-        <img class="menu-img" src="https://images.unsplash.com/photo-1637944220604-c5f28faac604?auto=format&fit=crop&w=700&q=80" alt="Varm sjokoladekake" />
         <div class="menu-course">Dessert</div>
         <div class="menu-name">Varm sjokoladekake</div>
         <p class="menu-desc">Fondant av mørk Valrhona-sjokolade, salt karamell, hjemmelaget vaniljeis og sprø hasselnøtter.</p>
@@ -834,7 +765,6 @@
       </div>
 
       <div class="om-info reveal">
-        <img src="https://images.unsplash.com/photo-1663530761401-15eefb544889?auto=format&fit=crop&w=800&q=80" alt="Kjøkkensjef Maria Andreassen" style="width:100%;aspect-ratio:4/3;object-fit:cover;margin-bottom:32px;border-radius:4px;opacity:0.9;" />
         <div class="om-info-row">
           <span class="om-info-label">Åpningstider</span>
           <span class="om-info-value">Tirsdag – Søndag · 17:00–23:00</span>

@@ -32,43 +32,9 @@
     }
 
     /* ── NAV ── */
-    /* ── DEMO BAR ── */
-    .demo-bar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 200;
-      height: 36px;
-      background: var(--yellow);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-    }
-
-    .demo-bar a {
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #0a0a0a;
-      text-decoration: none;
-    }
-
-    .demo-bar a:hover { text-decoration: underline; }
-
-    .demo-bar-label {
-      font-family: 'Inter', sans-serif;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(10,10,10,0.5);
-    }
-
     nav {
       position: fixed;
-      top: 36px; left: 0; right: 0;
+      top: 0; left: 0; right: 0;
       z-index: 100;
       display: flex;
       justify-content: space-between;
@@ -138,20 +104,7 @@
       position: relative;
       overflow: hidden;
       border-bottom: 2px solid var(--yellow);
-      background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1600&q=80');
-      background-size: cover;
-      background-position: center;
     }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(10,10,10,0.97) 30%, rgba(10,10,10,0.75) 70%, rgba(10,10,10,0.6) 100%);
-      z-index: 0;
-    }
-
-    .hero > * { position: relative; z-index: 1; }
 
     /* Angled accent stripe */
     .hero::before {
@@ -278,19 +231,6 @@
       gap: 0;
       border: 1px solid var(--outline);
     }
-
-    .class-img {
-      width: calc(100% + 72px);
-      margin: -40px -36px 32px;
-      aspect-ratio: 16/9;
-      object-fit: cover;
-      display: block;
-      opacity: 0.8;
-      filter: grayscale(20%) contrast(1.1);
-      transition: opacity 0.3s, filter 0.3s;
-    }
-
-    .class-card:hover .class-img { opacity: 1; filter: grayscale(0%) contrast(1); }
 
     .class-card {
       padding: 40px 36px;
@@ -713,12 +653,6 @@
 </head>
 <body>
 
-  <!-- DEMO BAR -->
-  <div class="demo-bar">
-    <a href="index.html">← Tilbake til Orbio</a>
-    <span class="demo-bar-label">Demo</span>
-  </div>
-
   <!-- NAV -->
   <nav>
     <a href="#" class="nav-logo">APE<span>X</span></a>
@@ -727,7 +661,7 @@
       <li><a href="#medlemskap">Medlemskap</a></li>
       <li><a href="#chat">Chat</a></li>
     </ul>
-    <a href="booking-gym.html" class="nav-cta">Bli medlem</a>
+    <a href="#chat" class="nav-cta">Bli medlem</a>
   </nav>
 
   <!-- HERO -->
@@ -741,7 +675,7 @@
         APEX er treningssenteret for deg som mener alvor. Toppmoderne utstyr, ekspert-instruktører og et fellesskap som pusher deg videre.
       </p>
       <div class="hero-actions">
-        <a href="booking-gym.html" class="btn-yellow">Bli medlem</a>
+        <a href="#chat" class="btn-yellow">Bli medlem</a>
         <a href="#klasser" class="btn-outline-white">Se klasser</a>
       </div>
     </div>
@@ -754,7 +688,6 @@
 
     <div class="classes-grid reveal">
       <div class="class-card">
-        <img class="class-img" src="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=700&q=80" alt="Styrketrening" />
         <div class="class-badge">Populær</div>
         <div class="class-name">Styrke</div>
         <p class="class-desc">Frivekter, maskiner og personlig veiledning. Bygg muskelmasse og styrke med strukturerte programmer.</p>
@@ -770,7 +703,6 @@
         </div>
       </div>
       <div class="class-card">
-        <img class="class-img" src="https://images.unsplash.com/photo-1633394782240-f81aba3f850d?auto=format&fit=crop&w=700&q=80" alt="Cardio" />
         <div class="class-badge">Kondisjon</div>
         <div class="class-name">Cardio</div>
         <p class="class-desc">Løpebånd, sykler, romaskin og HIIT-soner. Forbedre utholdenhet og brenner kalorier effektivt.</p>
@@ -786,7 +718,6 @@
         </div>
       </div>
       <div class="class-card">
-        <img class="class-img" src="https://images.unsplash.com/photo-1517130038641-a774d04afb3c?auto=format&fit=crop&w=700&q=80" alt="Gruppetimer" />
         <div class="class-badge">Gruppe</div>
         <div class="class-name">Gruppetimer</div>
         <p class="class-desc">HIIT, Yoga, Spinning og mer. Trening i gruppe med motiverende instruktører gir deg ekstra driv.</p>

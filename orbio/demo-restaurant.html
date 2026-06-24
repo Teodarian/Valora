@@ -451,13 +451,90 @@
 
     .chat-feature-text strong { color: var(--text); font-weight: 400; }
 
-    .chat-window {
+    .chat-open-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 32px;
+      padding: 15px 30px;
+      background: transparent;
+      color: var(--terra);
+      font-family: 'Manrope', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid var(--terra);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .chat-open-btn:hover { background: var(--terra); color: var(--text); }
+
+    /* ── FLOATING CHAT ── */
+    .fchat-bubble {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 58px;
+      height: 58px;
+      background: var(--terra);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .fchat-bubble:hover { transform: scale(1.07); background: #9e4d2d; }
+
+    .fchat-bubble svg { transition: opacity 0.2s, transform 0.2s; }
+    .fchat-bubble.open .icon-chat { opacity: 0; transform: scale(0.5); position: absolute; }
+    .fchat-bubble.open .icon-close { opacity: 1; transform: scale(1); }
+    .fchat-bubble .icon-close { opacity: 0; transform: scale(0.5); position: absolute; }
+
+    .fchat-popup {
+      position: fixed;
+      bottom: 100px;
+      right: 28px;
+      width: 380px;
+      height: 560px;
+      background: var(--bg-2);
       border: 1px solid var(--outline);
       border-radius: 4px;
       overflow: hidden;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.6);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(16px) scale(0.97);
+      transform-origin: bottom right;
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
-    .chat-window-header {
+    .fchat-popup.open {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0) scale(1);
+    }
+
+    .fchat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: var(--bg-3);
+      border-bottom: 1px solid var(--outline);
+      flex-shrink: 0;
+    }
+
+    .fchat-header-left {
       display: flex;
       align-items: center;
       gap: 12px;
@@ -466,14 +543,14 @@
       border-bottom: 1px solid var(--outline);
     }
 
-    .chat-window-dot {
+    .fchat-dot {
       width: 8px;
       height: 8px;
       background: var(--terra);
       border-radius: 1px;
     }
 
-    .chat-window-title {
+    .fchat-title {
       font-family: 'Manrope', sans-serif;
       font-size: 11px;
       font-weight: 600;
@@ -482,12 +559,28 @@
       color: var(--terra);
     }
 
-    .chat-window iframe {
-      display: block;
-      width: 100%;
-      height: 520px;
+    .fchat-close-btn {
+      background: none;
       border: none;
-      background: var(--bg-2);
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0 2px;
+      transition: color 0.2s;
+    }
+
+    .fchat-close-btn:hover { color: var(--text); }
+
+    .fchat-popup iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+      display: block;
+    }
+
+    @media (max-width: 480px) {
+      .fchat-popup { width: calc(100vw - 16px); right: 8px; bottom: 88px; }
     }
 
     /* ── FOOTER ── */
@@ -722,15 +815,31 @@
         </div>
       </div>
 
-      <div class="chat-window reveal">
-        <div class="chat-window-header">
-          <div class="chat-window-dot"></div>
-          <span class="chat-window-title">Brasa — Reserver & Spør</span>
-        </div>
-        <iframe src="https://typebot.io/resturant-a2viody"></iframe>
+      <div class="reveal">
+        <button class="chat-open-btn" onclick="toggleFChat()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Chat med oss
+        </button>
       </div>
     </div>
   </section>
+
+  <!-- FLOATING CHAT -->
+  <div class="fchat-bubble" id="fChatBubble" onclick="toggleFChat()">
+    <svg class="icon-chat" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f1e0ce" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <svg class="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f1e0ce" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </div>
+
+  <div class="fchat-popup" id="fChatPopup">
+    <div class="fchat-header">
+      <div class="fchat-header-left">
+        <div class="fchat-dot"></div>
+        <span class="fchat-title">Brasa — Reserver & Spør</span>
+      </div>
+      <button class="fchat-close-btn" onclick="toggleFChat()">×</button>
+    </div>
+    <iframe src="https://typebot.io/resturant-a2viody"></iframe>
+  </div>
 
   <!-- FOOTER -->
   <footer>
@@ -762,6 +871,13 @@
       });
     }, { threshold: 0.06 });
     reveals.forEach(el => io.observe(el));
+
+    function toggleFChat() {
+      const bubble = document.getElementById('fChatBubble');
+      const popup  = document.getElementById('fChatPopup');
+      bubble.classList.toggle('open');
+      popup.classList.toggle('open');
+    }
   </script>
 
 </body>

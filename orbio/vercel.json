@@ -10,6 +10,9 @@
     { "src": "/", "dest": "/index.html" },
     { "src": "/demo-frisor", "dest": "/demo-frisor.html" },
     { "src": "/demo-gym", "dest": "/demo-gym.html" },
-    { "src": "/demo-restaurant", "dest": "/demo-restaurant.html" }
+    { "src": "/demo-restaurant", "dest": "/demo-restaurant.html" },
+    { "src": "/booking-frisor", "dest": "/booking-frisor.html" },
+    { "src": "/booking-gym", "dest": "/booking-gym.html" },
+    { "src": "/booking-restaurant", "dest": "/booking-restaurant.html" }
   ]
 }

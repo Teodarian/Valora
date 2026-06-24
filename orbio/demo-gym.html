@@ -138,7 +138,20 @@
       position: relative;
       overflow: hidden;
       border-bottom: 2px solid var(--yellow);
+      background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1600&q=80');
+      background-size: cover;
+      background-position: center;
     }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.97) 30%, rgba(10,10,10,0.75) 70%, rgba(10,10,10,0.6) 100%);
+      z-index: 0;
+    }
+
+    .hero > * { position: relative; z-index: 1; }
 
     /* Angled accent stripe */
     .hero::before {
@@ -265,6 +278,19 @@
       gap: 0;
       border: 1px solid var(--outline);
     }
+
+    .class-img {
+      width: calc(100% + 72px);
+      margin: -40px -36px 32px;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+      opacity: 0.8;
+      filter: grayscale(20%) contrast(1.1);
+      transition: opacity 0.3s, filter 0.3s;
+    }
+
+    .class-card:hover .class-img { opacity: 1; filter: grayscale(0%) contrast(1); }
 
     .class-card {
       padding: 40px 36px;
@@ -728,6 +754,7 @@
 
     <div class="classes-grid reveal">
       <div class="class-card">
+        <img class="class-img" src="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=700&q=80" alt="Styrketrening" />
         <div class="class-badge">Populær</div>
         <div class="class-name">Styrke</div>
         <p class="class-desc">Frivekter, maskiner og personlig veiledning. Bygg muskelmasse og styrke med strukturerte programmer.</p>
@@ -743,6 +770,7 @@
         </div>
       </div>
       <div class="class-card">
+        <img class="class-img" src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=700&q=80" alt="Cardio" />
         <div class="class-badge">Kondisjon</div>
         <div class="class-name">Cardio</div>
         <p class="class-desc">Løpebånd, sykler, romaskin og HIIT-soner. Forbedre utholdenhet og brenner kalorier effektivt.</p>
@@ -758,6 +786,7 @@
         </div>
       </div>
       <div class="class-card">
+        <img class="class-img" src="https://images.unsplash.com/photo-1567013127542-490d757e51fc?auto=format&fit=crop&w=700&q=80" alt="Gruppetimer" />
         <div class="class-badge">Gruppe</div>
         <div class="class-name">Gruppetimer</div>
         <p class="class-desc">HIIT, Yoga, Spinning og mer. Trening i gruppe med motiverende instruktører gir deg ekstra driv.</p>

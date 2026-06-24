@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>APEX Treningssenter — Oslo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0a0a0a;
+      --bg-1:    #111111;
+      --bg-2:    #1a1a1a;
+      --bg-3:    #262626;
+      --text:    #ffffff;
+      --muted:   #888888;
+      --yellow:  #f5d400;
+      --yellow-d:#c2a900;
+      --outline: rgba(255,255,255,0.1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 64px;
+      height: 60px;
+      background: rgba(10,10,10,0.95);
+      border-bottom: 1px solid var(--outline);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--yellow); }
+
+    .nav-links {
+      display: flex;
+      gap: 0;
+      list-style: none;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 0 20px;
+      height: 60px;
+      line-height: 60px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0s, background 0s;
+    }
+
+    .nav-links a:hover { color: var(--bg); background: var(--yellow); }
+
+    .nav-cta {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--yellow);
+      color: var(--bg);
+      text-decoration: none;
+      padding: 10px 24px;
+      transition: background 0s;
+    }
+
+    .nav-cta:hover { background: #ffffff; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 64px 80px;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 2px solid var(--yellow);
+    }
+
+    /* Angled accent stripe */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; right: -200px; bottom: 0;
+      width: 600px;
+      background: linear-gradient(180deg, rgba(245,212,0,0.04) 0%, transparent 100%);
+      transform: skewX(-8deg);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      position: absolute;
+      top: 100px;
+      right: 64px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--yellow);
+      padding: 6px 14px;
+    }
+
+    .hero-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(80px, 14vw, 160px);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      max-width: 900px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease 0.1s forwards;
+    }
+
+    .hero-headline span { color: var(--yellow); }
+
+    .hero-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 48px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease 0.3s forwards;
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--muted);
+      max-width: 360px;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 0;
+    }
+
+    .btn-yellow {
+      display: inline-block;
+      padding: 18px 48px;
+      background: var(--yellow);
+      color: var(--bg);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0s;
+    }
+
+    .btn-yellow:hover { background: #ffffff; }
+
+    .btn-outline-white {
+      display: inline-block;
+      padding: 18px 40px;
+      background: transparent;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 2px solid var(--outline);
+      border-left: none;
+      transition: border-color 0s, color 0s, background 0s;
+    }
+
+    .btn-outline-white:hover { background: var(--text); color: var(--bg); }
+
+    /* ── SHARED ── */
+    section { padding: 100px 64px; border-bottom: 1px solid var(--outline); }
+
+    .section-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 6vw, 80px);
+      line-height: 1;
+      letter-spacing: 0.01em;
+      color: var(--text);
+      margin-bottom: 64px;
+    }
+
+    /* ── KLASSER ── */
+    #klasser { background: var(--bg-1); }
+
+    .classes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--outline);
+    }
+
+    .class-card {
+      padding: 40px 36px;
+      border-right: 1px solid var(--outline);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .class-card:last-child { border-right: none; }
+
+    .class-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--yellow);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.2s;
+    }
+
+    .class-card:hover::before { transform: scaleX(1); }
+
+    .class-badge {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--bg);
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      align-self: flex-start;
+    }
+
+    .class-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .class-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .class-meta {
+      margin-top: auto;
+      display: flex;
+      gap: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--outline);
+    }
+
+    .class-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .class-meta-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--yellow);
+    }
+
+    .class-meta-value {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* ── MEDLEMSKAP ── */
+    #medlemskap { background: var(--bg); }
+
+    .membership-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--outline);
+    }
+
+    .membership-card {
+      padding: 48px 36px;
+      border-right: 1px solid var(--outline);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .membership-card:last-child { border-right: none; }
+
+    .membership-card.featured {
+      background: var(--bg-2);
+      border-top: 3px solid var(--yellow);
+      margin-top: -1px;
+    }
+
+    .membership-tier {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--yellow);
+    }
+
+    .membership-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 40px;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .membership-price {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    .membership-price-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px;
+      color: var(--yellow);
+      line-height: 1;
+    }
+
+    .membership-price-unit {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .membership-includes {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      padding-top: 16px;
+      border-top: 1px solid var(--outline);
+    }
+
+    .membership-cta {
+      margin-top: auto;
+      display: block;
+      padding: 14px 24px;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--outline);
+      color: var(--text);
+      transition: background 0s, color 0s, border-color 0s;
+    }
+
+    .membership-cta:hover,
+    .membership-card.featured .membership-cta {
+      background: var(--yellow);
+      color: var(--bg);
+      border-color: var(--yellow);
+    }
+
+    /* ── CHAT ── */
+    #chat { background: var(--bg-1); }
+
+    .chat-intro {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      margin-bottom: 56px;
+      align-items: center;
+    }
+
+    .chat-desc {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .chat-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--outline);
+    }
+
+    .chat-stat {
+      padding: 24px 28px;
+      border-right: 1px solid var(--outline);
+      border-bottom: 1px solid var(--outline);
+    }
+
+    .chat-stat:nth-child(2) { border-right: none; }
+    .chat-stat:nth-child(3) { border-bottom: none; }
+    .chat-stat:nth-child(4) { border-right: none; border-bottom: none; }
+
+    .chat-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 40px;
+      color: var(--yellow);
+      line-height: 1;
+    }
+
+    .chat-stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .chat-window {
+      border: 1px solid var(--outline);
+      overflow: hidden;
+    }
+
+    .chat-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 24px;
+      background: var(--bg-2);
+      border-bottom: 1px solid var(--outline);
+    }
+
+    .chat-bar-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--yellow);
+    }
+
+    .chat-bar-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--yellow);
+    }
+
+    .chat-window iframe {
+      display: block;
+      width: 100%;
+      height: 520px;
+      border: none;
+      background: var(--bg-1);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 0 64px;
+      height: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 2px solid var(--yellow);
+      background: var(--bg);
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.06em;
+      color: var(--text);
+    }
+
+    .footer-logo span { color: var(--yellow); }
+
+    .footer-copy {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--bg-3);
+    }
+
+    .footer-orbio {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--bg-3);
+    }
+
+    .footer-orbio a { color: var(--bg-3); text-decoration: none; transition: color 0s; }
+    .footer-orbio a:hover { color: var(--yellow); }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 960px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 80px 20px 60px; }
+      section { padding: 72px 20px; }
+      .hero-bottom { flex-direction: column; gap: 32px; align-items: flex-start; }
+      .classes-grid,
+      .membership-grid { grid-template-columns: 1fr; }
+      .class-card,
+      .membership-card { border-right: none; border-bottom: 1px solid var(--outline); }
+      .class-card:last-child,
+      .membership-card:last-child { border-bottom: none; }
+      .chat-intro { grid-template-columns: 1fr; gap: 40px; }
+      footer { padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">APE<span>X</span></a>
+    <ul class="nav-links">
+      <li><a href="#klasser">Klasser</a></li>
+      <li><a href="#medlemskap">Medlemskap</a></li>
+      <li><a href="#chat">Chat</a></li>
+    </ul>
+    <a href="#chat" class="nav-cta">Bli medlem</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">Oslo — Sentrum</div>
+    <h1 class="hero-headline">
+      Push<br><span>your</span><br>limits.
+    </h1>
+    <div class="hero-bottom">
+      <p class="hero-sub">
+        APEX er treningssenteret for deg som mener alvor. Toppmoderne utstyr, ekspert-instruktører og et fellesskap som pusher deg videre.
+      </p>
+      <div class="hero-actions">
+        <a href="#chat" class="btn-yellow">Bli medlem</a>
+        <a href="#klasser" class="btn-outline-white">Se klasser</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- KLASSER -->
+  <section id="klasser">
+    <p class="section-label reveal">Treningsprogram</p>
+    <h2 class="section-title reveal">Velg din<br>treningsform</h2>
+
+    <div class="classes-grid reveal">
+      <div class="class-card">
+        <div class="class-badge">Populær</div>
+        <div class="class-name">Styrke</div>
+        <p class="class-desc">Frivekter, maskiner og personlig veiledning. Bygg muskelmasse og styrke med strukturerte programmer.</p>
+        <div class="class-meta">
+          <div class="class-meta-item">
+            <span class="class-meta-label">Nivå</span>
+            <span class="class-meta-value">Alle nivåer</span>
+          </div>
+          <div class="class-meta-item">
+            <span class="class-meta-label">Varighet</span>
+            <span class="class-meta-value">60 min</span>
+          </div>
+        </div>
+      </div>
+      <div class="class-card">
+        <div class="class-badge">Kondisjon</div>
+        <div class="class-name">Cardio</div>
+        <p class="class-desc">Løpebånd, sykler, romaskin og HIIT-soner. Forbedre utholdenhet og brenner kalorier effektivt.</p>
+        <div class="class-meta">
+          <div class="class-meta-item">
+            <span class="class-meta-label">Nivå</span>
+            <span class="class-meta-value">Alle nivåer</span>
+          </div>
+          <div class="class-meta-item">
+            <span class="class-meta-label">Varighet</span>
+            <span class="class-meta-value">30–60 min</span>
+          </div>
+        </div>
+      </div>
+      <div class="class-card">
+        <div class="class-badge">Gruppe</div>
+        <div class="class-name">Gruppetimer</div>
+        <p class="class-desc">HIIT, Yoga, Spinning og mer. Trening i gruppe med motiverende instruktører gir deg ekstra driv.</p>
+        <div class="class-meta">
+          <div class="class-meta-item">
+            <span class="class-meta-label">Klasser/uke</span>
+            <span class="class-meta-value">30+</span>
+          </div>
+          <div class="class-meta-item">
+            <span class="class-meta-label">Varighet</span>
+            <span class="class-meta-value">45–60 min</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEDLEMSKAP -->
+  <section id="medlemskap">
+    <p class="section-label reveal">Priser</p>
+    <h2 class="section-title reveal">Finn riktig<br>medlemskap</h2>
+
+    <div class="membership-grid reveal">
+      <div class="membership-card">
+        <div class="membership-tier">Basis</div>
+        <div class="membership-name">Standard</div>
+        <div class="membership-price">
+          <span class="membership-price-num">499</span>
+          <span class="membership-price-unit">kr/mnd</span>
+        </div>
+        <p class="membership-includes">Treningsgulv, garderobe, 1 senterlokasjon</p>
+        <a href="#chat" class="membership-cta">Kom i gang</a>
+      </div>
+      <div class="membership-card featured">
+        <div class="membership-tier">Mest populær</div>
+        <div class="membership-name">Premium</div>
+        <div class="membership-price">
+          <span class="membership-price-num">699</span>
+          <span class="membership-price-unit">kr/mnd</span>
+        </div>
+        <p class="membership-includes">Alt i Standard + alle gruppetimer, alle lokasjoner</p>
+        <a href="#chat" class="membership-cta">Kom i gang</a>
+      </div>
+      <div class="membership-card">
+        <div class="membership-tier">Komplett</div>
+        <div class="membership-name">Elite</div>
+        <div class="membership-price">
+          <span class="membership-price-num">999</span>
+          <span class="membership-price-unit">kr/mnd</span>
+        </div>
+        <p class="membership-includes">Alt i Premium + PT-timer og personlig treningsprogram</p>
+        <a href="#chat" class="membership-cta">Kom i gang</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAT -->
+  <section id="chat">
+    <div class="chat-intro reveal">
+      <div>
+        <p class="section-label">Spør oss</p>
+        <h2 class="section-title" style="margin-bottom:20px;">Svar på<br>sekunder.</h2>
+        <p class="chat-desc">Spør om åpningstider, klasser, priser eller hva som passer best for deg. Chatten er alltid åpen.</p>
+      </div>
+      <div class="chat-stats">
+        <div class="chat-stat">
+          <div class="chat-stat-num">24/7</div>
+          <div class="chat-stat-label">Tilgjengelig</div>
+        </div>
+        <div class="chat-stat">
+          <div class="chat-stat-num">&lt;10s</div>
+          <div class="chat-stat-label">Responstid</div>
+        </div>
+        <div class="chat-stat">
+          <div class="chat-stat-num">3</div>
+          <div class="chat-stat-label">Lokasjoner</div>
+        </div>
+        <div class="chat-stat">
+          <div class="chat-stat-num">30+</div>
+          <div class="chat-stat-label">Klasser/uke</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-window reveal">
+      <div class="chat-bar">
+        <div class="chat-bar-dot"></div>
+        <span class="chat-bar-label">APEX — Support</span>
+      </div>
+      <iframe src="https://typebot.io/oslo-treningsenter-gba4l00"></iframe>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-logo">APE<span>X</span></span>
+    <span class="footer-copy">© 2026 APEX Treningssenter</span>
+    <span class="footer-orbio"><a href="index.html">Nettside av Orbio</a></span>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.06 });
+    reveals.forEach(el => io.observe(el));
+  </script>
+
+</body>
+</html>

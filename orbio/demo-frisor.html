@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lumina Frisørsalong — Oslo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Hanken+Grotesk:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d0d0d;
+      --bg-1:     #141414;
+      --bg-2:     #1a1a1a;
+      --bg-3:     #262626;
+      --text:     #ffffff;
+      --muted:    #a0a0a0;
+      --gold:     #c9a06a;
+      --gold-dim: rgba(201,160,106,0.3);
+      --outline:  rgba(201,160,106,0.18);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 64px;
+      height: 64px;
+      background: rgba(13,13,13,0.88);
+      border-bottom: 1px solid var(--outline);
+      backdrop-filter: blur(20px);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      border: 1px solid var(--gold);
+      padding: 10px 24px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .nav-cta:hover { background: var(--gold); color: var(--bg); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 64px 80px;
+      position: relative;
+      border-bottom: 1px solid var(--outline);
+      overflow: hidden;
+    }
+
+    /* Subtle vertical lines as structural accents */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: var(--outline);
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.1s forwards;
+    }
+
+    .hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      max-width: 740px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.25s forwards;
+    }
+
+    .hero-headline em { color: var(--gold); font-style: italic; }
+
+    .hero-sub {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--muted);
+      margin-top: 36px;
+      max-width: 440px;
+      line-height: 1.7;
+      letter-spacing: 0.01em;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.4s forwards;
+    }
+
+    .hero-actions {
+      margin-top: 56px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.55s forwards;
+    }
+
+    .btn-gold {
+      display: inline-block;
+      padding: 16px 40px;
+      background: transparent;
+      color: var(--gold);
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--gold);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-gold:hover { background: var(--gold); color: var(--bg); }
+
+    .btn-text {
+      display: inline-block;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      padding-bottom: 2px;
+      border-bottom: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .btn-text:hover { color: var(--text); border-bottom-color: var(--text); }
+
+    /* ── SHARED SECTION ── */
+    section { padding: 120px 64px; border-bottom: 1px solid var(--outline); }
+
+    .section-label {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 4vw, 56px);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 60px;
+    }
+
+    /* ── TJENESTER ── */
+    #tjenester { background: var(--bg-1); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--outline);
+    }
+
+    .service-card {
+      padding: 48px 40px;
+      border-right: 1px solid var(--outline);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .service-card:last-child { border-right: none; }
+
+    .service-tag {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      padding-left: 12px;
+      border-left: 2px solid var(--gold);
+    }
+
+    .service-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .service-desc {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.65;
+      letter-spacing: 0.01em;
+    }
+
+    .service-price {
+      margin-top: auto;
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--gold);
+      padding-top: 20px;
+      border-top: 1px solid var(--outline);
+    }
+
+    /* ── OM OSS ── */
+    #om { background: var(--bg); }
+
+    .om-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: center;
+    }
+
+    .om-text {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.8;
+      letter-spacing: 0.01em;
+      margin-bottom: 24px;
+    }
+
+    .om-text strong { color: var(--text); font-weight: 400; }
+
+    .om-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      margin: 32px 0;
+    }
+
+    .om-right {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border: 1px solid var(--outline);
+    }
+
+    .om-fact {
+      padding: 32px 36px;
+      border-bottom: 1px solid var(--outline);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .om-fact:last-child { border-bottom: none; }
+
+    .om-fact-label {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .om-fact-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--text);
+    }
+
+    /* ── CHATBOT ── */
+    #chat { background: var(--bg-1); }
+
+    .chat-intro {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      margin-bottom: 64px;
+      align-items: end;
+    }
+
+    .chat-desc {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.75;
+      letter-spacing: 0.01em;
+    }
+
+    .chat-wrapper {
+      border: 1px solid var(--outline);
+      overflow: hidden;
+      background: var(--bg-2);
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--outline);
+      background: var(--bg-3);
+    }
+
+    .chat-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+    }
+
+    .chat-title {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .chat-wrapper iframe {
+      display: block;
+      width: 100%;
+      height: 520px;
+      border: none;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 48px 64px;
+      background: var(--bg);
+      border-top: 1px solid var(--outline);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--text);
+    }
+
+    .footer-info {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .footer-info p {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    .footer-orbio {
+      text-align: right;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--bg-3);
+    }
+
+    .footer-orbio a {
+      color: var(--bg-3);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-orbio a:hover { color: var(--gold); }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 100px 24px 64px; }
+      section { padding: 80px 24px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .service-card { border-right: none; border-bottom: 1px solid var(--outline); }
+      .service-card:last-child { border-bottom: none; }
+      .om-grid { grid-template-columns: 1fr; gap: 48px; }
+      .chat-intro { grid-template-columns: 1fr; gap: 32px; }
+      footer { grid-template-columns: 1fr; text-align: center; }
+      .footer-orbio { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Lumina</a>
+    <ul class="nav-links">
+      <li><a href="#tjenester">Tjenester</a></li>
+      <li><a href="#om">Om oss</a></li>
+      <li><a href="#chat">Kontakt</a></li>
+    </ul>
+    <a href="#chat" class="nav-cta">Bestill time</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <p class="hero-label">Frisørsalong — Oslo sentrum</p>
+    <h1 class="hero-headline">
+      Skjønnhet<br>er en <em>kunst.</em>
+    </h1>
+    <p class="hero-sub">
+      Lumina er din eksklusive frisørsalong i Oslo. Vi kombinerer nordisk estetikk med håndverket til erfarne stylister.
+    </p>
+    <div class="hero-actions">
+      <a href="#chat" class="btn-gold">Bestill time</a>
+      <a href="#tjenester" class="btn-text">Se tjenester</a>
+    </div>
+  </div>
+
+  <!-- TJENESTER -->
+  <section id="tjenester">
+    <p class="section-label reveal">Tjenester</p>
+    <h2 class="section-title reveal">Hva vi tilbyr</h2>
+
+    <div class="services-grid reveal">
+      <div class="service-card">
+        <div class="service-tag">Klassisk</div>
+        <div class="service-name">Klipp & Styling</div>
+        <p class="service-desc">Skreddersydd klipp og styling tilpasset ditt hår og din stil. Inkluderer konsultasjon, vask og finish.</p>
+        <div class="service-price">Fra 590 kr</div>
+      </div>
+      <div class="service-card">
+        <div class="service-tag">Farge</div>
+        <div class="service-name">Fargebehandling</div>
+        <p class="service-desc">Heldekkende farge, highlights eller balayage. Vi bruker kun profesjonelle produkter av høy kvalitet.</p>
+        <div class="service-price">Fra 890 kr</div>
+      </div>
+      <div class="service-card">
+        <div class="service-tag">Behandling</div>
+        <div class="service-name">Hårpleie & Mask</div>
+        <p class="service-desc">Intensiv hårpleie for tørt, skadet eller kresent hår. Gjenoppbygging av struktur og glans.</p>
+        <div class="service-price">Fra 490 kr</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OM OSS -->
+  <section id="om">
+    <div class="om-grid">
+      <div class="reveal">
+        <p class="section-label">Om Lumina</p>
+        <h2 class="section-title" style="margin-bottom:32px;">Erfaring du<br>kan kjenne.</h2>
+        <p class="om-text">
+          Lumina ble grunnlagt med én visjon: å tilby en rolig, eksklusiv salonopplevelse i hjertet av Oslo. Vi tror at et besøk hos oss skal føles som en pause fra hverdagen.
+        </p>
+        <div class="om-divider"></div>
+        <p class="om-text">
+          Teamet vårt består av <strong>erfarne stylister</strong> med spesialisering innen moderne nordisk hårdesign. Vi tar oss god tid med hver klient.
+        </p>
+      </div>
+
+      <div class="om-right reveal">
+        <div class="om-fact">
+          <span class="om-fact-label">Åpningstider</span>
+          <span class="om-fact-value">Tirsdag — Lørdag</span>
+        </div>
+        <div class="om-fact">
+          <span class="om-fact-label">Adresse</span>
+          <span class="om-fact-value">Bogstadveien 12, Oslo</span>
+        </div>
+        <div class="om-fact">
+          <span class="om-fact-label">Tlf</span>
+          <span class="om-fact-value">+47 22 00 00 00</span>
+        </div>
+        <div class="om-fact">
+          <span class="om-fact-label">Erfaring</span>
+          <span class="om-fact-value">Over 10 år i bransjen</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHATBOT -->
+  <section id="chat">
+    <div class="chat-intro">
+      <div class="reveal">
+        <p class="section-label">Bestill & Spør</p>
+        <h2 class="section-title" style="margin-bottom:16px;">Vi er tilgjengelige<br><em>når du trenger oss.</em></h2>
+        <p class="chat-desc">
+          Bruk chatten til å bestille time, spørre om priser eller behandlinger. Chatten er tilgjengelig hele døgnet og svarer deg umiddelbart.
+        </p>
+      </div>
+      <div class="reveal" style="display:flex;flex-direction:column;gap:16px;">
+        <div class="om-fact" style="border:1px solid var(--outline);">
+          <span class="om-fact-label">Responstid</span>
+          <span class="om-fact-value" style="font-size:18px;">Øyeblikkelig svar</span>
+        </div>
+        <div class="om-fact" style="border:1px solid var(--outline);">
+          <span class="om-fact-label">Tilgjengelig</span>
+          <span class="om-fact-value" style="font-size:18px;">24 timer i døgnet</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-wrapper reveal">
+      <div class="chat-header">
+        <div class="chat-dot"></div>
+        <span class="chat-title">Lumina — Assistent</span>
+      </div>
+      <iframe src="https://typebot.io/hair-magic-u6hg3yk"></iframe>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Lumina</div>
+    <div class="footer-info">
+      <p>Bogstadveien 12, Oslo</p>
+      <p>Tirsdag–Lørdag · +47 22 00 00 00</p>
+      <p>© 2026 Lumina Frisørsalong</p>
+    </div>
+    <div class="footer-orbio">
+      <a href="index.html">Nettside av Orbio</a>
+    </div>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.06 });
+    reveals.forEach(el => io.observe(el));
+  </script>
+
+</body>
+</html>

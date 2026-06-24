@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brasa — Restaurant Oslo</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #1a1208;
+      --bg-1:      #231a0f;
+      --bg-2:      #271e13;
+      --bg-3:      #32281d;
+      --bg-4:      #3d3327;
+      --text:      #f1e0ce;
+      --muted:     #a08070;
+      --terra:     #b85c38;
+      --terra-dim: rgba(184,92,56,0.2);
+      --outline:   rgba(241,224,206,0.1);
+      --outline-g: rgba(241,224,206,0.06);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Manrope', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 64px;
+      height: 68px;
+      background: rgba(26,18,8,0.9);
+      border-bottom: 1px solid var(--outline);
+      backdrop-filter: blur(20px);
+    }
+
+    .nav-logo {
+      font-family: 'EB Garamond', serif;
+      font-size: 26px;
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Manrope', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-reserve {
+      font-family: 'Manrope', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      background: var(--terra);
+      padding: 11px 28px;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    .nav-reserve:hover { background: #9a4523; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 64px 100px;
+      position: relative;
+      border-bottom: 1px solid var(--outline);
+      overflow: hidden;
+    }
+
+    /* Warm glow accent */
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; right: -100px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(184,92,56,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-family: 'Manrope', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--terra);
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.1s forwards;
+    }
+
+    .hero-headline {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(48px, 7vw, 100px);
+      font-weight: 400;
+      line-height: 1.06;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      max-width: 780px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.25s forwards;
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      color: var(--terra);
+    }
+
+    .hero-divider {
+      width: 48px;
+      height: 1px;
+      background: var(--terra);
+      margin: 40px 0;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.4s forwards;
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 440px;
+      line-height: 1.75;
+      letter-spacing: 0.01em;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.5s forwards;
+    }
+
+    .hero-actions {
+      margin-top: 52px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.65s forwards;
+    }
+
+    .btn-terra {
+      display: inline-block;
+      padding: 16px 40px;
+      background: var(--terra);
+      color: var(--text);
+      font-family: 'Manrope', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    .btn-terra:hover { background: #9a4523; }
+
+    .btn-ghost-warm {
+      display: inline-block;
+      padding: 16px 32px;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'Manrope', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--outline);
+      border-radius: 4px;
+      transition: color 0.3s, border-color 0.3s;
+    }
+
+    .btn-ghost-warm:hover { color: var(--text); border-color: rgba(241,224,206,0.3); }
+
+    /* ── SHARED ── */
+    section { padding: 120px 64px; border-bottom: 1px solid var(--outline); }
+
+    .section-label {
+      font-family: 'Manrope', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--terra);
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(32px, 4.5vw, 60px);
+      font-weight: 400;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 64px;
+    }
+
+    .section-title em { font-style: italic; color: var(--terra); }
+
+    /* ── MENY ── */
+    #meny { background: var(--bg-1); }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--outline);
+    }
+
+    .menu-item {
+      padding: 40px 44px;
+      border-right: 1px solid var(--outline);
+      border-bottom: 1px solid var(--outline);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .menu-item:nth-child(2n) { border-right: none; }
+    .menu-item:nth-last-child(-n+2) { border-bottom: none; }
+
+    .menu-course {
+      font-family: 'Manrope', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--terra);
+    }
+
+    .menu-name {
+      font-family: 'EB Garamond', serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .menu-desc {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.65;
+      letter-spacing: 0.01em;
+    }
+
+    .menu-price {
+      margin-top: auto;
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--outline-g);
+    }
+
+    .menu-price-val {
+      font-family: 'Manrope', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--text);
+    }
+
+    .menu-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--terra);
+      border: 1px solid var(--terra-dim);
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+
+    /* ── OM ── */
+    #om { background: var(--bg); }
+
+    .om-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: start;
+    }
+
+    .om-text {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.8;
+      letter-spacing: 0.01em;
+      margin-bottom: 24px;
+    }
+
+    .om-text strong { color: var(--text); font-weight: 400; }
+
+    .om-quote {
+      margin-top: 40px;
+      padding: 32px 36px;
+      border-left: 2px solid var(--terra);
+      background: var(--bg-1);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .om-quote p {
+      font-family: 'EB Garamond', serif;
+      font-size: 22px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.5;
+      letter-spacing: 0.01em;
+    }
+
+    .om-quote cite {
+      display: block;
+      margin-top: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-style: normal;
+    }
+
+    .om-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border: 1px solid var(--outline);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .om-info-row {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--outline);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .om-info-row:last-child { border-bottom: none; }
+
+    .om-info-label {
+      font-family: 'Manrope', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--terra);
+    }
+
+    .om-info-value {
+      font-family: 'EB Garamond', serif;
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--text);
+    }
+
+    /* ── CHAT ── */
+    #chat { background: var(--bg-1); }
+
+    .chat-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .chat-left { display: flex; flex-direction: column; gap: 32px; }
+
+    .chat-desc {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.75;
+      letter-spacing: 0.01em;
+    }
+
+    .chat-features {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border: 1px solid var(--outline);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .chat-feature {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--outline);
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .chat-feature:last-child { border-bottom: none; }
+
+    .chat-feature-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--terra);
+      border-radius: 1px;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+
+    .chat-feature-text {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .chat-feature-text strong { color: var(--text); font-weight: 400; }
+
+    .chat-window {
+      border: 1px solid var(--outline);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .chat-window-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 24px;
+      background: var(--bg-2);
+      border-bottom: 1px solid var(--outline);
+    }
+
+    .chat-window-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--terra);
+      border-radius: 1px;
+    }
+
+    .chat-window-title {
+      font-family: 'Manrope', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--terra);
+    }
+
+    .chat-window iframe {
+      display: block;
+      width: 100%;
+      height: 520px;
+      border: none;
+      background: var(--bg-2);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 48px 64px;
+      background: var(--bg);
+      border-top: 1px solid var(--outline);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .footer-logo {
+      font-family: 'EB Garamond', serif;
+      font-size: 22px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--text);
+    }
+
+    .footer-info {
+      display: flex;
+      gap: 40px;
+    }
+
+    .footer-info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .footer-info-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--terra);
+    }
+
+    .footer-info-value {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+    }
+
+    .footer-orbio {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--bg-4);
+    }
+
+    .footer-orbio a { color: var(--bg-4); text-decoration: none; transition: color 0.3s; }
+    .footer-orbio a:hover { color: var(--terra); }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 960px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 100px 20px 72px; }
+      section { padding: 80px 20px; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .menu-item { border-right: none; }
+      .menu-item:nth-last-child(-n+2) { border-bottom: 1px solid var(--outline); }
+      .menu-item:last-child { border-bottom: none; }
+      .om-grid { grid-template-columns: 1fr; gap: 48px; }
+      .chat-layout { grid-template-columns: 1fr; gap: 40px; }
+      .footer-inner { flex-direction: column; }
+      .footer-info { flex-direction: column; gap: 20px; }
+      footer { padding: 40px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Brasa</a>
+    <ul class="nav-links">
+      <li><a href="#meny">Meny</a></li>
+      <li><a href="#om">Om oss</a></li>
+      <li><a href="#chat">Reserver</a></li>
+    </ul>
+    <a href="#chat" class="nav-reserve">Reserver bord</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <p class="hero-label">Restaurant — Oslo</p>
+    <h1 class="hero-headline">
+      Smaken av<br><em>det aller beste</em><br>Oslo har å by på.
+    </h1>
+    <div class="hero-divider"></div>
+    <p class="hero-sub">
+      Brasa er en intim og varm restaurant i Oslo sentrum. Vi serverer nordisk mat med søreuropeisk sjel — lagd med sesongens råvarer fra norske produsenter.
+    </p>
+    <div class="hero-actions">
+      <a href="#chat" class="btn-terra">Reserver bord</a>
+      <a href="#meny" class="btn-ghost-warm">Se menyen</a>
+    </div>
+  </div>
+
+  <!-- MENY -->
+  <section id="meny">
+    <p class="section-label reveal">Dagens meny</p>
+    <h2 class="section-title reveal">Utvalgte<br><em>retter</em></h2>
+
+    <div class="menu-grid reveal">
+      <div class="menu-item">
+        <div class="menu-course">Forrett</div>
+        <div class="menu-name">Kamskjell med ertepuré</div>
+        <p class="menu-desc">Ferske norske kamskjell, kremete ertepuré med mynte, sprø bacon og sitronsmør. Servert med ristet surdeigsbrød.</p>
+        <div class="menu-price">
+          <span class="menu-price-val">195 kr</span>
+          <span class="menu-tag">Anbefalt</span>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-course">Forrett</div>
+        <div class="menu-name">Tartar av hjort</div>
+        <p class="menu-desc">Håndskåret hjortetartar fra Valdres, smaksatt med sennep, kapers og eggeplomme. Garnityr av tørkede urter.</p>
+        <div class="menu-price">
+          <span class="menu-price-val">225 kr</span>
+          <span class="menu-tag">Sesong</span>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-course">Hovedrett</div>
+        <div class="menu-name">Braisert lammeskank</div>
+        <p class="menu-desc">24-timers braisert lammeskank fra Hardanger, rotgrønnsaker, rødvinsaus og potetpuré med rosmarin.</p>
+        <div class="menu-price">
+          <span class="menu-price-val">365 kr</span>
+          <span class="menu-tag">Anbefalt</span>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-course">Dessert</div>
+        <div class="menu-name">Varm sjokoladekake</div>
+        <p class="menu-desc">Fondant av mørk Valrhona-sjokolade, salt karamell, hjemmelaget vaniljeis og sprø hasselnøtter.</p>
+        <div class="menu-price">
+          <span class="menu-price-val">145 kr</span>
+          <span class="menu-tag">Klassiker</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OM OSS -->
+  <section id="om">
+    <div class="om-grid">
+      <div class="reveal">
+        <p class="section-label">Om Brasa</p>
+        <h2 class="section-title" style="margin-bottom:28px;">Laget med<br><em>kjærlighet</em><br>til råvaren.</h2>
+        <p class="om-text">
+          Brasa ble grunnlagt i 2019 av kjøkkensjef Maria Andreassen, med visjonen om å skape en restaurant der maten forteller historier. Vi jobber tett med lokale bønder og fiskere for å sikre de beste råvarene.
+        </p>
+        <p class="om-text">
+          Navn betyr "glød" på portugisisk — og det beskriver nøyaktig den <strong>varmen og energien</strong> vi ønsker at gjestene skal kjenne når de spiser her.
+        </p>
+        <div class="om-quote">
+          <p>"Vi koker ikke bare mat. Vi lager øyeblikk folk husker."</p>
+          <cite>— Maria Andreassen, Kjøkkensjef</cite>
+        </div>
+      </div>
+
+      <div class="om-info reveal">
+        <div class="om-info-row">
+          <span class="om-info-label">Åpningstider</span>
+          <span class="om-info-value">Tirsdag – Søndag · 17:00–23:00</span>
+        </div>
+        <div class="om-info-row">
+          <span class="om-info-label">Adresse</span>
+          <span class="om-info-value">Theatergata 8, Oslo sentrum</span>
+        </div>
+        <div class="om-info-row">
+          <span class="om-info-label">Telefon</span>
+          <span class="om-info-value">+47 22 11 22 33</span>
+        </div>
+        <div class="om-info-row">
+          <span class="om-info-label">Dress code</span>
+          <span class="om-info-value">Smart casual</span>
+        </div>
+        <div class="om-info-row">
+          <span class="om-info-label">Kapasitet</span>
+          <span class="om-info-value">42 kuverter innendørs</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAT / RESERVER -->
+  <section id="chat">
+    <p class="section-label reveal">Ta kontakt</p>
+    <h2 class="section-title reveal">Reserver bord<br>eller <em>still oss et spørsmål.</em></h2>
+
+    <div class="chat-layout">
+      <div class="chat-left reveal">
+        <p class="chat-desc">
+          Bruk chatten til å reservere bord, spørre om menyen, allergener eller spesielle arrangementer. Vi er tilgjengelige hele døgnet.
+        </p>
+        <div class="chat-features">
+          <div class="chat-feature">
+            <div class="chat-feature-dot"></div>
+            <p class="chat-feature-text"><strong>Bordreservasjon</strong> — Velg dato, tidspunkt og antall gjester direkte i chatten.</p>
+          </div>
+          <div class="chat-feature">
+            <div class="chat-feature-dot"></div>
+            <p class="chat-feature-text"><strong>Menyspørsmål</strong> — Spør om allergener, vegetar- og veganalternativer.</p>
+          </div>
+          <div class="chat-feature">
+            <div class="chat-feature-dot"></div>
+            <p class="chat-feature-text"><strong>Private arrangementer</strong> — Ta kontakt for selskapsmiddager og bedriftsarrangementer.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-window reveal">
+        <div class="chat-window-header">
+          <div class="chat-window-dot"></div>
+          <span class="chat-window-title">Brasa — Reserver & Spør</span>
+        </div>
+        <iframe src="https://typebot.io/resturant-a2viody"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">Brasa</div>
+      <div class="footer-info">
+        <div class="footer-info-item">
+          <span class="footer-info-label">Adresse</span>
+          <span class="footer-info-value">Theatergata 8, Oslo</span>
+        </div>
+        <div class="footer-info-item">
+          <span class="footer-info-label">Åpent</span>
+          <span class="footer-info-value">Tir–Søn · 17–23</span>
+        </div>
+        <div class="footer-info-item">
+          <span class="footer-info-label">Tlf</span>
+          <span class="footer-info-value">+47 22 11 22 33</span>
+        </div>
+      </div>
+      <div class="footer-orbio"><a href="index.html">Nettside av Orbio</a></div>
+    </div>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.06 });
+    reveals.forEach(el => io.observe(el));
+  </script>
+
+</body>
+</html>

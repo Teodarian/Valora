@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbio — Nettside + chatbot for lokale bedrifter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #131313;
+      --bg-low:    #1b1b1b;
+      --bg-mid:    #1f1f1f;
+      --bg-high:   #2a2a2a;
+      --bg-higher: #353535;
+      --on-bg:     #e2e2e2;
+      --muted:     #a1a1a1;
+      --orange:    #ff5c00;
+      --orange-dim:#802a00;
+      --outline:   #3a3a3a;
+      --white:     #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--on-bg);
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── PIXEL CURSOR ── */
+    body, a, button { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect x='0' y='0' width='8' height='8' fill='%23ff5c00'/%3E%3C/svg%3E") 4 4, auto; }
+
+    /* ── SCANLINE TEXTURE ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.04) 2px,
+        rgba(0,0,0,0.04) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 48px;
+      height: 56px;
+      background: rgba(19,19,19,0.92);
+      border-bottom: 1px solid var(--outline);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .nav-logo span { color: var(--orange); }
+
+    .nav-links {
+      display: flex;
+      gap: 0;
+      list-style: none;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 0 20px;
+      height: 56px;
+      line-height: 56px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      border-left: 1px solid var(--outline);
+      transition: color 0s, background 0s;
+    }
+
+    .nav-links a:hover {
+      color: var(--bg);
+      background: var(--orange);
+    }
+
+    .nav-links li:last-child a { border-right: 1px solid var(--outline); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      padding: 120px 48px 0;
+      border-bottom: 1px solid var(--outline);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--outline) 1px, transparent 1px),
+        linear-gradient(90deg, var(--outline) 1px, transparent 1px);
+      background-size: 80px 80px;
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      align-self: center;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeIn 0.4s ease 0.1s forwards;
+    }
+
+    .hero-eyebrow::before { content: '> '; opacity: 0.5; }
+
+    .hero-headline {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(40px, 7vw, 96px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      max-width: 860px;
+      opacity: 0;
+      animation: fadeIn 0.4s ease 0.25s forwards;
+    }
+
+    .hero-headline .accent { color: var(--orange); }
+
+    .hero-sub {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--muted);
+      margin-top: 40px;
+      max-width: 520px;
+      line-height: 1.65;
+      opacity: 0;
+      animation: fadeIn 0.4s ease 0.4s forwards;
+    }
+
+    .hero-cta {
+      margin-top: 56px;
+      display: flex;
+      gap: 0;
+      align-items: stretch;
+      opacity: 0;
+      animation: fadeIn 0.4s ease 0.55s forwards;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 16px 40px;
+      background: var(--orange);
+      color: var(--bg);
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--orange);
+      transition: background 0s, color 0s, border-color 0s;
+    }
+
+    .btn-primary:hover {
+      background: transparent;
+      color: var(--orange);
+    }
+
+    .btn-ghost {
+      display: inline-block;
+      padding: 16px 40px;
+      background: transparent;
+      color: var(--on-bg);
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--outline);
+      border-left: none;
+      transition: background 0s, color 0s;
+    }
+
+    .btn-ghost:hover {
+      background: var(--on-bg);
+      color: var(--bg);
+    }
+
+    .hero-ticker {
+      position: relative;
+      z-index: 1;
+      margin-top: 80px;
+      border-top: 1px solid var(--outline);
+      display: flex;
+      overflow: hidden;
+      height: 40px;
+      align-items: center;
+    }
+
+    .ticker-track {
+      display: flex;
+      gap: 0;
+      white-space: nowrap;
+      animation: ticker 22s linear infinite;
+    }
+
+    .ticker-item {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 32px;
+      border-right: 1px solid var(--outline);
+    }
+
+    .ticker-item span { color: var(--orange); }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── SECTION SHARED ── */
+    section {
+      padding: 96px 48px;
+      border-bottom: 1px solid var(--outline);
+    }
+
+    .label-caps {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 20px;
+    }
+
+    .label-caps::before { content: '[ '; }
+    .label-caps::after  { content: ' ]'; }
+
+    .section-title {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--white);
+    }
+
+    /* ── ABOUT ── */
+    #om { background: var(--bg-low); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+      margin-top: 64px;
+    }
+
+    .about-text {
+      font-size: 17px;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .about-text strong {
+      color: var(--on-bg);
+      font-weight: 400;
+    }
+
+    .about-right {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--outline);
+    }
+
+    .about-stat {
+      padding: 32px 36px;
+      border-bottom: 1px solid var(--outline);
+      display: flex;
+      align-items: baseline;
+      gap: 24px;
+    }
+
+    .about-stat:last-child { border-bottom: none; }
+
+    .stat-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 52px;
+      font-weight: 700;
+      color: var(--orange);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* ── HVORDAN DET FUNGERER ── */
+    #hvordan { background: var(--bg-mid); }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--outline);
+      margin-top: 64px;
+    }
+
+    .step-card {
+      padding: 40px 36px;
+      border-right: 1px solid var(--outline);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .step-card:last-child { border-right: none; }
+
+    .step-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+
+    .step-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.3;
+    }
+
+    .step-desc {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── PORTFOLIO ── */
+    #portfolio { background: var(--bg); }
+
+    .portfolio-intro {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 80px;
+      align-items: end;
+    }
+
+    .portfolio-desc {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--outline);
+    }
+
+    .portfolio-card {
+      border-right: 1px solid var(--outline);
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      transition: background 0s;
+    }
+
+    .portfolio-card:last-child { border-right: none; }
+
+    .portfolio-card:hover .portfolio-preview { opacity: 0.85; }
+    .portfolio-card:hover .portfolio-cta { color: var(--bg); background: var(--orange); border-color: var(--orange); }
+
+    /* Preview window — represents each site's style */
+    .portfolio-preview {
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding: 20px 24px;
+      transition: opacity 0.15s;
+    }
+
+    .portfolio-preview-frisor {
+      background: linear-gradient(160deg, #0d0d0d 0%, #1a1410 60%, #2a1f15 100%);
+      border-bottom: 1px solid var(--outline);
+    }
+
+    .portfolio-preview-gym {
+      background: linear-gradient(160deg, #0a0a0a 0%, #111100 60%, #1a1900 100%);
+      border-bottom: 1px solid var(--outline);
+    }
+
+    .portfolio-preview-restaurant {
+      background: linear-gradient(160deg, #1a1208 0%, #241a0c 60%, #2e1f0e 100%);
+      border-bottom: 1px solid var(--outline);
+    }
+
+    .preview-name {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    .preview-name-frisor {
+      font-size: 28px;
+      color: #c9a06a;
+      font-style: italic;
+      font-family: Georgia, serif;
+    }
+
+    .preview-name-gym {
+      font-size: 40px;
+      color: #f5d400;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .preview-name-restaurant {
+      font-size: 30px;
+      color: #f0e6d0;
+      font-family: Georgia, serif;
+      font-style: italic;
+    }
+
+    /* Decorative pixel accents in preview */
+    .preview-dot {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+    }
+
+    .preview-dot-frisor { background: #c9a06a; top: 20px; right: 24px; }
+    .preview-dot-gym    { background: #f5d400; top: 20px; right: 24px; }
+    .preview-dot-rest   { background: #b85c38; top: 20px; right: 24px; }
+
+    .preview-line {
+      position: absolute;
+      height: 1px;
+      left: 0; right: 0;
+    }
+
+    .preview-line-frisor { background: rgba(201,160,106,0.2); bottom: 60px; }
+    .preview-line-gym    { background: rgba(245,212,0,0.15); bottom: 60px; }
+    .preview-line-rest   { background: rgba(240,230,208,0.1); bottom: 60px; }
+
+    .portfolio-body {
+      padding: 28px 28px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .portfolio-type {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+
+    .portfolio-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .portfolio-tagline {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .portfolio-cta {
+      margin-top: auto;
+      padding-top: 20px;
+      display: inline-block;
+      padding: 10px 20px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      border: 1px solid var(--orange);
+      text-decoration: none;
+      align-self: flex-start;
+      transition: background 0s, color 0s, border-color 0s;
+    }
+
+    /* ── CONTACT ── */
+    #kontakt { background: var(--bg-low); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 80px;
+      margin-top: 64px;
+      align-items: start;
+    }
+
+    .contact-info-item {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--outline);
+    }
+
+    .contact-info-item:first-child { border-top: 1px solid var(--outline); }
+
+    .contact-info-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 6px;
+    }
+
+    .contact-info-value {
+      font-size: 15px;
+      color: var(--on-bg);
+      font-weight: 300;
+    }
+
+    .form-field { margin-bottom: 24px; }
+
+    .form-label {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-mid);
+      border: 1px solid var(--outline);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--on-bg);
+      outline: none;
+      transition: border-color 0s;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus { border-color: var(--orange); }
+
+    .form-textarea { resize: none; height: 100px; }
+
+    .form-submit {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 16px 40px;
+      background: var(--orange);
+      color: var(--bg);
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid var(--orange);
+      cursor: pointer;
+      transition: background 0s, color 0s;
+    }
+
+    .form-submit:hover {
+      background: transparent;
+      color: var(--orange);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 0 48px;
+      height: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--outline);
+    }
+
+    .footer-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--on-bg);
+    }
+
+    .footer-logo span { color: var(--orange); }
+
+    .footer-copy {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--bg-higher);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 96px 24px 0; }
+      section { padding: 72px 24px; }
+      .about-grid,
+      .portfolio-intro,
+      .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .step-card { border-right: none; border-bottom: 1px solid var(--outline); }
+      .step-card:last-child { border-bottom: none; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .portfolio-card { border-right: none; border-bottom: 1px solid var(--outline); }
+      .portfolio-card:last-child { border-bottom: none; }
+      footer { padding: 0 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Or<span>bio</span></a>
+    <ul class="nav-links">
+      <li><a href="#om">Om</a></li>
+      <li><a href="#hvordan">Slik fungerer det</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero" id="top">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">Orbio — nettside + chatbot for lokale bedrifter</p>
+      <h1 class="hero-headline">
+        Profesjonell<br>nettside.<br><span class="accent">Chatbot inkludert.</span>
+      </h1>
+      <p class="hero-sub">
+        Vi bygger nettsider med innebygd chatbot for lokale Oslo-bedrifter. Kundene dine kan bestille time, stille spørsmål og kontakte deg — direkte på nettsiden, 24/7.
+      </p>
+      <div class="hero-cta">
+        <a href="#portfolio" class="btn-primary">Se portfolio</a>
+        <a href="#kontakt" class="btn-ghost">Ta kontakt</a>
+      </div>
+    </div>
+
+    <div class="hero-ticker">
+      <div class="ticker-track">
+        <span class="ticker-item">Nettside <span>+</span> chatbot</span>
+        <span class="ticker-item">Alt i én pakke</span>
+        <span class="ticker-item">Oppe innen <span>48 timer</span></span>
+        <span class="ticker-item">Ingen tekniske krav</span>
+        <span class="ticker-item">Tilgjengelig <span>24/7</span></span>
+        <span class="ticker-item">Skreddersydd til din bedrift</span>
+        <!-- duplicate for seamless loop -->
+        <span class="ticker-item">Nettside <span>+</span> chatbot</span>
+        <span class="ticker-item">Alt i én pakke</span>
+        <span class="ticker-item">Oppe innen <span>48 timer</span></span>
+        <span class="ticker-item">Ingen tekniske krav</span>
+        <span class="ticker-item">Tilgjengelig <span>24/7</span></span>
+        <span class="ticker-item">Skreddersydd til din bedrift</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="om">
+    <p class="label-caps reveal">Om oss</p>
+    <h2 class="section-title reveal">Én leverandør.<br>Én pakke. Ferdig.</h2>
+
+    <div class="about-grid">
+      <div>
+        <p class="about-text reveal">
+          Vi heter Kaushik og Teo og driver Solvr, et lite digitalt konsulentfirma basert i Oslo. Gjennom Orbio bygger vi nettsider med innebygd chatbot for lokale bedrifter — alt som én ferdig pakke.
+        </p>
+        <p class="about-text reveal">
+          Du trenger ikke to leverandører, ingen separate systemer, og ingen teknisk kunnskap. <strong>Vi tar oss av alt. Du får en nettside som jobber for deg — selv når du ikke er tilstede.</strong>
+        </p>
+      </div>
+
+      <div class="about-right reveal">
+        <div class="about-stat">
+          <div class="stat-num">48t</div>
+          <div class="stat-label">Fra bestilling til ferdig nettside med chatbot</div>
+        </div>
+        <div class="about-stat">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Tilpasset din bedrift, dine kunder og din bransje</div>
+        </div>
+        <div class="about-stat">
+          <div class="stat-num">0</div>
+          <div class="stat-label">Tekniske krav til deg som eier</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HVORDAN DET FUNGERER -->
+  <section id="hvordan">
+    <p class="label-caps reveal">Prosessen</p>
+    <h2 class="section-title reveal">Slik fungerer det.</h2>
+
+    <div class="steps-grid reveal">
+      <div class="step-card">
+        <div class="step-num">// Steg 01</div>
+        <div class="step-title">Du forteller oss om bedriften din</div>
+        <p class="step-desc">Vi trenger 15 minutter og litt info om hvem du er, hva du tilbyr og hvem kundene dine er. Ingen teknisk kunnskap nødvendig.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">// Steg 02</div>
+        <div class="step-title">Vi bygger nettsiden og chatboten</div>
+        <p class="step-desc">Vi lager en profesjonell nettside skreddersydd til din bransje og en chatbot som svarer kundene dine automatisk — booking, spørsmål, info.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">// Steg 03</div>
+        <div class="step-title">Du er oppe og kjører på 48 timer</div>
+        <p class="step-desc">Vi leverer alt ferdig, satt opp og klart til bruk. Du trenger ikke gjøre noe teknisk — bare si ja og vi ordner resten.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="portfolio">
+    <div class="portfolio-intro">
+      <div>
+        <p class="label-caps reveal">Portfolio</p>
+        <h2 class="section-title reveal">Se hva vi kan<br>bygge for deg.</h2>
+      </div>
+      <p class="portfolio-desc reveal">
+        Her er tre eksempler på nettsider vi har bygget — én for frisørsalong, én for treningssenter og én for restaurant. Hver har sin egen stil og en innebygd chatbot klar til bruk.
+      </p>
+    </div>
+
+    <div class="portfolio-grid reveal">
+
+      <!-- Frisør -->
+      <a href="demo-frisor.html" class="portfolio-card">
+        <div class="portfolio-preview portfolio-preview-frisor">
+          <div class="preview-dot preview-dot-frisor"></div>
+          <div class="preview-line preview-line-frisor"></div>
+          <span class="preview-name preview-name-frisor">Lumina</span>
+        </div>
+        <div class="portfolio-body">
+          <div class="portfolio-type">Frisørsalong</div>
+          <div class="portfolio-title">Lumina Frisørsalong</div>
+          <p class="portfolio-tagline">Elegant og luksuriøs stil. Chatbot for timebestilling og spørsmål om behandlinger.</p>
+          <span class="portfolio-cta">Se demo &rarr;</span>
+        </div>
+      </a>
+
+      <!-- Gym -->
+      <a href="demo-gym.html" class="portfolio-card">
+        <div class="portfolio-preview portfolio-preview-gym">
+          <div class="preview-dot preview-dot-gym"></div>
+          <div class="preview-line preview-line-gym"></div>
+          <span class="preview-name preview-name-gym">APEX</span>
+        </div>
+        <div class="portfolio-body">
+          <div class="portfolio-type">Treningssenter</div>
+          <div class="portfolio-title">APEX Treningssenter</div>
+          <p class="portfolio-tagline">Energisk og kraftig design. Chatbot for informasjon om klasser og medlemskap.</p>
+          <span class="portfolio-cta">Se demo &rarr;</span>
+        </div>
+      </a>
+
+      <!-- Restaurant -->
+      <a href="demo-restaurant.html" class="portfolio-card">
+        <div class="portfolio-preview portfolio-preview-restaurant">
+          <div class="preview-dot preview-dot-rest"></div>
+          <div class="preview-line preview-line-rest"></div>
+          <span class="preview-name preview-name-restaurant">Brasa</span>
+        </div>
+        <div class="portfolio-body">
+          <div class="portfolio-type">Restaurant</div>
+          <div class="portfolio-title">Brasa Restaurant</div>
+          <p class="portfolio-tagline">Varm og sofistikert atmosfære. Chatbot for bordreservasjon og menuspørsmål.</p>
+          <span class="portfolio-cta">Se demo &rarr;</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="kontakt">
+    <p class="label-caps reveal">Kontakt</p>
+    <h2 class="section-title reveal">La oss høre<br>om din bedrift.</h2>
+
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="contact-info-item">
+          <p class="contact-info-label">E-post</p>
+          <p class="contact-info-value">kaushik7244@gmail.com</p>
+        </div>
+        <div class="contact-info-item">
+          <p class="contact-info-label">Telefon</p>
+          <p class="contact-info-value">+47 97313147</p>
+        </div>
+        <div class="contact-info-item">
+          <p class="contact-info-label">Tilgjengelighet</p>
+          <p class="contact-info-value">Lørdager og Mandager</p>
+        </div>
+        <div class="contact-info-item">
+          <p class="contact-info-label">Responstid</p>
+          <p class="contact-info-value">Vi svarer innen 24 timer</p>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <form action="https://formspree.io/f/meedalga" method="POST">
+          <div class="form-field">
+            <label class="form-label" for="name">Ditt navn</label>
+            <input class="form-input" id="name" name="name" type="text" required />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="email">E-post</label>
+            <input class="form-input" id="email" name="email" type="email" required />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="business">Hva slags bedrift?</label>
+            <input class="form-input" id="business" name="business" type="text" />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="message">Melding</label>
+            <textarea class="form-textarea form-input" id="message" name="message"></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send melding</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-logo">Or<span>bio</span></span>
+    <span class="footer-copy">// 2026 — Alle rettigheter forbeholdt</span>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    reveals.forEach(el => io.observe(el));
+  </script>
+
+</body>
+</html>

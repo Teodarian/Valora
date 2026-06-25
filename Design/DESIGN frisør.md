@@ -1,149 +1,139 @@
 ---
-name: Nordic Nocturne
+name: Lumina Salon Identity
 colors:
-  surface: '#131313'
-  surface-dim: '#131313'
-  surface-bright: '#393939'
-  surface-container-lowest: '#0e0e0e'
-  surface-container-low: '#1b1c1c'
-  surface-container: '#1f2020'
-  surface-container-high: '#2a2a2a'
-  surface-container-highest: '#353535'
-  on-surface: '#e4e2e1'
-  on-surface-variant: '#c4c7c7'
-  inverse-surface: '#e4e2e1'
-  inverse-on-surface: '#303030'
-  outline: '#8e9192'
-  outline-variant: '#444748'
-  surface-tint: '#c9c6c5'
-  primary: '#c9c6c5'
-  on-primary: '#313030'
-  primary-container: '#0d0d0d'
-  on-primary-container: '#7c7a7a'
-  inverse-primary: '#5f5e5e'
-  secondary: '#ebbf86'
-  on-secondary: '#452b00'
-  secondary-container: '#614316'
-  on-secondary-container: '#dcb17a'
-  tertiary: '#c6c6c7'
-  on-tertiary: '#2f3131'
-  tertiary-container: '#0b0d0e'
-  on-tertiary-container: '#797b7b'
-  error: '#ffb4ab'
-  on-error: '#690005'
-  error-container: '#93000a'
-  on-error-container: '#ffdad6'
-  primary-fixed: '#e5e2e1'
-  primary-fixed-dim: '#c9c6c5'
-  on-primary-fixed: '#1c1b1b'
-  on-primary-fixed-variant: '#474646'
-  secondary-fixed: '#ffddb4'
-  secondary-fixed-dim: '#ebbf86'
-  on-secondary-fixed: '#291800'
-  on-secondary-fixed-variant: '#5f4114'
-  tertiary-fixed: '#e2e2e2'
-  tertiary-fixed-dim: '#c6c6c7'
-  on-tertiary-fixed: '#1a1c1c'
-  on-tertiary-fixed-variant: '#454747'
-  background: '#131313'
-  on-background: '#e4e2e1'
-  surface-variant: '#353535'
+  surface: '#fff8f2'
+  surface-dim: '#dfd9d3'
+  surface-bright: '#fff8f2'
+  surface-container-lowest: '#ffffff'
+  surface-container-low: '#f9f2ec'
+  surface-container: '#f3ede7'
+  surface-container-high: '#eee7e1'
+  surface-container-highest: '#e8e1dc'
+  on-surface: '#1e1b18'
+  on-surface-variant: '#504444'
+  inverse-surface: '#33302c'
+  inverse-on-surface: '#f6f0ea'
+  outline: '#827474'
+  outline-variant: '#d4c2c3'
+  surface-tint: '#7c5357'
+  primary: '#7c5357'
+  on-primary: '#ffffff'
+  primary-container: '#e8b4b8'
+  on-primary-container: '#6b4448'
+  inverse-primary: '#eeb9bd'
+  secondary: '#4a645a'
+  on-secondary: '#ffffff'
+  secondary-container: '#cce9dc'
+  on-secondary-container: '#506a60'
+  tertiary: '#675971'
+  on-tertiary: '#ffffff'
+  tertiary-container: '#ccbbd7'
+  on-tertiary-container: '#574a61'
+  error: '#ba1a1a'
+  on-error: '#ffffff'
+  error-container: '#ffdad6'
+  on-error-container: '#93000a'
+  primary-fixed: '#ffdadc'
+  primary-fixed-dim: '#eeb9bd'
+  on-primary-fixed: '#301216'
+  on-primary-fixed-variant: '#623c40'
+  secondary-fixed: '#cce9dc'
+  secondary-fixed-dim: '#b1cdc1'
+  on-secondary-fixed: '#062018'
+  on-secondary-fixed-variant: '#334c43'
+  tertiary-fixed: '#eedcf9'
+  tertiary-fixed-dim: '#d2c0dd'
+  on-tertiary-fixed: '#22172c'
+  on-tertiary-fixed-variant: '#4e4259'
+  background: '#fff8f2'
+  on-background: '#1e1b18'
+  surface-variant: '#e8e1dc'
 typography:
-  headline-xl:
-    fontFamily: Playfair Display
-    fontSize: 64px
+  display-lg:
+    fontFamily: DM Serif Display
+    fontSize: 48px
     fontWeight: '400'
     lineHeight: '1.1'
-    letterSpacing: -0.02em
-  headline-xl-mobile:
-    fontFamily: Playfair Display
-    fontSize: 40px
-    fontWeight: '400'
-    lineHeight: '1.2'
-    letterSpacing: -0.01em
-  headline-lg:
-    fontFamily: Playfair Display
-    fontSize: 48px
+  display-lg-mobile:
+    fontFamily: DM Serif Display
+    fontSize: 36px
     fontWeight: '400'
     lineHeight: '1.2'
   headline-md:
-    fontFamily: Playfair Display
+    fontFamily: DM Serif Display
     fontSize: 32px
     fontWeight: '400'
-    lineHeight: '1.3'
+    lineHeight: '1.2'
   body-lg:
-    fontFamily: Hanken Grotesk
+    fontFamily: Plus Jakarta Sans
     fontSize: 18px
     fontWeight: '300'
     lineHeight: '1.6'
-    letterSpacing: 0.01em
   body-md:
-    fontFamily: Hanken Grotesk
+    fontFamily: Plus Jakarta Sans
     fontSize: 16px
     fontWeight: '400'
-    lineHeight: '1.6'
-  label-caps:
-    fontFamily: Hanken Grotesk
-    fontSize: 12px
-    fontWeight: '600'
-    lineHeight: '1'
-    letterSpacing: 0.2em
+    lineHeight: '1.5'
+  label-sm:
+    fontFamily: Plus Jakarta Sans
+    fontSize: 14px
+    fontWeight: '500'
+    lineHeight: '1.4'
+    letterSpacing: 0.02em
+rounded:
+  sm: 0.5rem
+  DEFAULT: 1rem
+  md: 1.5rem
+  lg: 2rem
+  xl: 3rem
+  full: 9999px
 spacing:
-  unit: 8px
-  container-max: 1440px
+  base: 8px
+  section-gap-desktop: 120px
+  section-gap-mobile: 64px
+  container-max-width: 1200px
   gutter: 24px
-  section-padding-desktop: 120px
-  section-padding-mobile: 64px
 ---
 
 ## Brand & Style
-The brand personality is rooted in "Quiet Luxury"—a philosophy of restraint, quality, and atmospheric depth. Targeting a discerning clientele in Oslo, the design evokes the serene, exclusive ambiance of a high-end boutique hotel or a private spa retreat. 
+The brand personality is rooted in serenity, warmth, and self-care. It targets an audience seeking a sanctuary from the daily hustle, emphasizing a soft-focus feminine aesthetic that feels premium yet approachable. 
 
-The style is a blend of **Sophisticated Minimalism** and **High-Contrast Noir**. It relies on the tension between deep, near-black voids and razor-sharp, gold-accented details. The emotional response should be one of immediate calm, prestige, and "hushed" exclusivity. Every element is intentional; there is no visual clutter, only essential information presented with architectural precision.
+The design style is a refined blend of **Minimalism** and **Tactile Softness**. It utilizes generous whitespace to allow the photography of hair textures and salon interiors to breathe. The interface mimics physical objects with gentle depth, using "pill" shapes and substantial corner radii to remove all visual tension, creating an environment that feels as restorative as the salon experience itself.
 
 ## Colors
-The palette is strictly curated to maintain a high-end, nocturnal aesthetic.
-
-- **Primary (#0d0d0d):** The "Nocturne" base. Used for all major backgrounds to create depth and a sense of infinite space.
-- **Secondary (#c9a06a):** "Burnished Gold." Used sparingly for interactive accents, subtle dividers, and high-value callouts. It represents the warmth of the salon interior.
-- **High-Contrast Text (#ffffff):** Pure white, used for primary headings and body copy to ensure absolute legibility against the dark void.
-- **Muted Neutral (#262626):** Used for subtle UI containers, input fields, or secondary borders where pure black lacks sufficient definition.
+The palette is inspired by natural clay, dried florals, and botanical mint. 
+- **Background (#FDF6F0):** A warm cream that serves as the canvas, preventing the clinical feel of pure white.
+- **Primary (#E8B4B8):** A dusty rose used for call-to-action elements and key brand highlights.
+- **Secondary & Tertiary:** Sage mint and soft lavender are reserved for categorizing services (e.g., coloring vs. styling) and decorative gradients.
+- **Text:** High-contrast warm brown ensures legibility while maintaining the organic, earthy tone of the system.
 
 ## Typography
-The typography contrasts the editorial elegance of **Playfair Display** with the modern, precise clarity of **Hanken Grotesk**.
+The typographic system relies on the contrast between the authoritative, literary elegance of **DM Serif Display** and the clean, modern friendliness of **Plus Jakarta Sans**. 
 
-- **Headlines:** Set in Playfair Display. Large scale headings should utilize slight negative letter-spacing to feel more "locked" and intentional.
-- **Body:** Hanken Grotesk is used at a light weight (300) for large blocks of text to maintain a sophisticated, airy feel.
-- **Navigation & Labels:** Always uppercase with generous letter-spacing (0.2em) to evoke luxury branding found in high-fashion houses.
-- **Language:** All micro-copy and labels must be in Norwegian (e.g., "Bestill Time" instead of "Book Now").
+All headlines must be set in *italics* to emphasize the fluid, "hair-like" curves and feminine grace of the brand. Body text utilizes lighter weights (300-400) to maintain an airy feel, ensuring that large blocks of information, such as service descriptions, do not feel heavy or cluttered.
 
 ## Layout & Spacing
-The layout follows a **Fixed Grid** philosophy with extreme white (black) space. 
-
-- **Desktop:** A 12-column grid with a maximum width of 1440px. Gutters are kept at 24px, but margins are expansive to center the content as a "gallery" piece.
-- **Vertical Rhythm:** Sections are separated by massive vertical padding (120px+) to allow the eye to rest and to signify the slow, relaxed pace of a luxury service.
-- **Asymmetry:** Use intentional offset placements for imagery and text blocks to create a contemporary, editorial feel. 
-- **Mobile:** Transition to a 4-column grid with 16px gutters. Reduce section padding to 64px, ensuring that full-bleed imagery maintains the atmospheric impact.
+This design system employs a **fluid grid** with intentional "breathing zones." 
+- **Desktop:** A 12-column grid with wide 24px gutters. Margins are dynamic but should never drop below 40px to maintain the luxury boutique feel.
+- **Mobile:** A 4-column grid with 16px gutters and 20px side margins.
+- **Vertical Rhythm:** Use large, consistent vertical spacing between sections (80px to 120px) to signify a relaxed, unhurried pace. Elements within cards or components should follow an 8px baseline grid.
 
 ## Elevation & Depth
-In this design system, depth is not created through shadows, but through **Tonal Layering** and **Atmospheric Lighting**.
-
-- **Surfaces:** Use `#0d0d0d` for the base level. Secondary surfaces (like cards or menu overlays) use `#1a1a1a` or a very subtle gold-tinted border (1px).
-- **Outlines:** Use "Ghost Borders"—ultra-thin 1px lines in either `#262626` or `#c9a06a` at 30% opacity. 
-- **Imagery:** High-end photography should be treated with a slight desaturation or a warm, dark overlay to blend seamlessly into the background.
-- **Shadows:** No shadows are permitted. Objects are either flush with the surface or exist in a separate plane defined by hard edges.
+Depth is created through **Ambient Shadows** rather than structural lines. 
+- **Floating Cards:** Use a very soft, diffused shadow: `0 8px 32px rgba(61, 46, 46, 0.06)`. Note the use of the warm brown text color in the shadow's tint to maintain color harmony.
+- **Transitions:** Surfaces should appear to "lift" slightly on hover by increasing the shadow's spread and decreasing its opacity.
+- **Glassmorphism:** Use subtle backdrop blurs (12px to 20px) for navigation bars or overlay modals to keep the warm background visible while maintaining focus.
 
 ## Shapes
-The shape language is strictly **Sharp (0px)**. This reinforces the architectural, high-end nature of the brand.
-
-- **Buttons & Inputs:** Hard 90-degree corners only.
-- **Images:** Always rectangular or square with sharp edges. No circular avatars; use square crops for stylist profiles.
-- **Dividers:** 1px solid lines. Horizontal dividers should often be full-bleed or extend to grid boundaries to emphasize the structure.
+The shape language is defined by the **Pill** and the **Ultra-Rounded Rectangle**. 
+- **Interactive Elements:** Buttons, tags, and input fields should always be fully rounded (pill-shaped).
+- **Containers:** Image frames and content cards use a consistent 32px radius on desktop, scaling down to 24px on mobile devices.
+- **Decorative Elements:** Use organic, "blob" shapes with soft gradients between the primary and tertiary colors as background accents behind photography.
 
 ## Components
-- **Buttons:** Primary buttons are transparent with a 1px Gold (#c9a06a) border and white uppercase text. On hover, the background fills with Gold and text changes to Primary Black.
-- **Chips/Tags:** Used for hair services (e.g., "Klipp," "Farge"). These are small, uppercase Hanken Grotesk labels with a thin Gold left-border only.
-- **Lists:** Service menus should be minimalist: Service Name (Left), Price (Right), with a very faint dotted line or empty space between them.
-- **Input Fields:** Bottom-border only (1px white or gold). No box enclosure. Floating labels in Hanken Grotesk.
-- **Cards:** Used for "Treatments" or "Gallery." Cards have no background or shadow; they are defined by the sharp-edged image they contain and the typography beneath them.
-- **Booking Modal:** A full-screen overlay in Primary Black with Gold accents, ensuring the user feels they have entered a "private" space for their appointment.
+- **Buttons:** Primary buttons are pill-shaped with the dusty rose background and warm brown text. Use a subtle scale-up transition on hover.
+- **Service Cards:** Use the floating card style with the 32px radius. Feature an image with a rounded top and text content below with generous padding (min 32px).
+- **Input Fields:** Rounded pills with a thin 1px border in the muted text color (#9B8080) at 30% opacity. On focus, the border shifts to the primary rose color.
+- **Chips/Tags:** Used for hair service categories (e.g., "Balayage", "Cut"). Pill-shaped with the secondary sage mint background at 20% opacity.
+- **Booking Calendar:** A clean, minimalist layout with high whitespace. Selected dates are indicated by a soft, primary-colored circle.
+- **Image Frames:** Hair gallery photos should always feature the 32px corner radius to maintain the "soft" visual language. Avoid sharp corners in all instances.

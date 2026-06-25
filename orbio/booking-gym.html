@@ -29,32 +29,58 @@
 
     /* ── DEMO BAR ── */
     .demo-bar {
-      height: 36px;
+      position: sticky;
+      top: 0;
+      z-index: 9999;
+      height: 44px;
       background: var(--yellow);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 24px;
+      padding: 0 20px;
+      box-shadow: 0 2px 16px rgba(245,212,0,0.3);
       flex-shrink: 0;
     }
 
-    .demo-bar a {
-      font-size: 11px;
+    .demo-bar-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      letter-spacing: 0.06em;
       color: #0a0a0a;
       text-decoration: none;
+      background: rgba(0,0,0,0.12);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      transition: background 0.15s;
     }
 
-    .demo-bar a:hover { text-decoration: underline; }
+    .demo-bar-back:hover { background: rgba(0,0,0,0.22); }
 
-    .demo-bar-label {
+    .demo-bar-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
       font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
+      font-weight: 800;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: rgba(10,10,10,0.5);
+      color: #0a0a0a;
+      background: rgba(0,0,0,0.1);
+      padding: 5px 12px;
+      border-radius: 9999px;
+    }
+
+    .demo-bar-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #0a0a0a;
+      opacity: 0.6;
+      flex-shrink: 0;
     }
 
     /* ── TOPBAR ── */
@@ -351,8 +377,8 @@
 <body>
 
   <div class="demo-bar">
-    <a href="index.html">← Tilbake til Orbio</a>
-    <span class="demo-bar-label">Demo</span>
+    <a href="index.html" class="demo-bar-back">← Orbio portfolio</a>
+    <span class="demo-bar-badge">Demo</span>
   </div>
 
   <div class="topbar">

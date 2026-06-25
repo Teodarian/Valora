@@ -32,40 +32,64 @@
       font-size: 16px;
       line-height: 1.6;
       overflow-x: hidden;
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M28 2 L30 5 L8 29 L4 27 Z' fill='%23b85c38'/%3E%3Cpath d='M4 27 L8 29 L5 32 L1 30 Z' fill='%23886040'/%3E%3C/svg%3E") 28 2, auto;
     }
 
     /* ── DEMO BAR ── */
     .demo-bar {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 200;
-      height: 36px;
+      z-index: 9999;
+      height: 44px;
       background: var(--terra);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 24px;
+      padding: 0 20px;
+      box-shadow: 0 2px 16px rgba(184,92,56,0.35);
     }
 
-    .demo-bar a {
+    .demo-bar-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
       font-family: 'Manrope', sans-serif;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      letter-spacing: 0.04em;
       color: #f1e0ce;
       text-decoration: none;
+      background: rgba(255,255,255,0.18);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      transition: background 0.2s;
     }
 
-    .demo-bar a:hover { text-decoration: underline; }
+    .demo-bar-back:hover { background: rgba(255,255,255,0.3); }
 
-    .demo-bar-label {
+    .demo-bar-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
       font-family: 'Manrope', sans-serif;
       font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
+      font-weight: 700;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: rgba(241,224,206,0.55);
+      color: rgba(241,224,206,0.9);
+      background: rgba(0,0,0,0.15);
+      padding: 5px 12px;
+      border-radius: 9999px;
+    }
+
+    .demo-bar-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #f1e0ce;
+      opacity: 0.8;
+      flex-shrink: 0;
     }
 
     /* ── NAV ── */
@@ -734,8 +758,8 @@
 
   <!-- DEMO BAR -->
   <div class="demo-bar">
-    <a href="index.html">← Tilbake til Orbio</a>
-    <span class="demo-bar-label">Demo</span>
+    <a href="index.html" class="demo-bar-back">← Orbio portfolio</a>
+    <span class="demo-bar-badge">Demo</span>
   </div>
 
   <!-- NAV -->
@@ -885,12 +909,6 @@
         </div>
       </div>
 
-      <div class="reveal">
-        <button class="chat-open-btn" onclick="toggleFChat()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          Chat med oss
-        </button>
-      </div>
     </div>
   </section>
 

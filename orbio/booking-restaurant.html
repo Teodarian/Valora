@@ -25,37 +25,63 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M28 2 L30 5 L8 29 L4 27 Z' fill='%23b85c38'/%3E%3Cpath d='M4 27 L8 29 L5 32 L1 30 Z' fill='%23886040'/%3E%3C/svg%3E") 28 2, auto;
     }
 
     /* ── DEMO BAR ── */
     .demo-bar {
-      height: 36px;
+      position: sticky;
+      top: 0;
+      z-index: 9999;
+      height: 44px;
       background: var(--terra);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 24px;
+      padding: 0 20px;
+      box-shadow: 0 2px 16px rgba(184,92,56,0.35);
       flex-shrink: 0;
     }
 
-    .demo-bar a {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #fff;
+    .demo-bar-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #f1e0ce;
       text-decoration: none;
-      opacity: 0.9;
+      background: rgba(255,255,255,0.18);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      transition: background 0.2s;
     }
 
-    .demo-bar a:hover { opacity: 1; text-decoration: underline; }
+    .demo-bar-back:hover { background: rgba(255,255,255,0.3); }
 
-    .demo-bar-label {
+    .demo-bar-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
       font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
+      font-weight: 700;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.5);
+      color: rgba(241,224,206,0.9);
+      background: rgba(0,0,0,0.15);
+      padding: 5px 12px;
+      border-radius: 9999px;
+    }
+
+    .demo-bar-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #f1e0ce;
+      opacity: 0.8;
+      flex-shrink: 0;
     }
 
     /* ── TOPBAR ── */
@@ -357,8 +383,8 @@
 <body>
 
   <div class="demo-bar">
-    <a href="index.html">← Tilbake til Orbio</a>
-    <span class="demo-bar-label">Demo</span>
+    <a href="index.html" class="demo-bar-back">← Orbio portfolio</a>
+    <span class="demo-bar-badge">Demo</span>
   </div>
 
   <div class="topbar">

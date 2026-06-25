@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Orbio — Nettsider med automatisert kundebetjening</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&family=DM+Serif+Display:ital@1&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -442,7 +442,7 @@
     }
 
     .portfolio-preview-frisor {
-      background: linear-gradient(160deg, #0d0d0d 0%, #1a1410 60%, #2a1f15 100%);
+      background: linear-gradient(160deg, #fff8f2 0%, #f3ede7 55%, #e8b4b8 100%);
       border-bottom: 1px solid var(--outline);
     }
 
@@ -467,9 +467,9 @@
 
     .preview-name-frisor {
       font-size: 28px;
-      color: #c9a06a;
+      color: #7c5357;
       font-style: italic;
-      font-family: Georgia, serif;
+      font-family: 'DM Serif Display', Georgia, serif;
     }
 
     .preview-name-gym {
@@ -493,7 +493,7 @@
       height: 6px;
     }
 
-    .preview-dot-frisor { background: #c9a06a; top: 20px; right: 24px; }
+    .preview-dot-frisor { background: #7c5357; top: 20px; right: 24px; }
     .preview-dot-gym    { background: #f5d400; top: 20px; right: 24px; }
     .preview-dot-rest   { background: #b85c38; top: 20px; right: 24px; }
 
@@ -503,7 +503,7 @@
       left: 0; right: 0;
     }
 
-    .preview-line-frisor { background: rgba(201,160,106,0.2); bottom: 60px; }
+    .preview-line-frisor { background: rgba(232,180,184,0.4); bottom: 60px; }
     .preview-line-gym    { background: rgba(245,212,0,0.15); bottom: 60px; }
     .preview-line-rest   { background: rgba(240,230,208,0.1); bottom: 60px; }
 
@@ -715,7 +715,6 @@
       <li><a href="#om">Om</a></li>
       <li><a href="#hvordan">Slik fungerer det</a></li>
       <li><a href="#portfolio">Portfolio</a></li>
-      <li><a href="#kontakt">Kontakt</a></li>
     </ul>
   </nav>
 
@@ -834,7 +833,7 @@
         <div class="portfolio-body">
           <div class="portfolio-type">Frisørsalong</div>
           <div class="portfolio-title">Lumina Frisørsalong</div>
-          <p class="portfolio-tagline">Elegant og luksuriøs stil. Kundene bestiller time og får svar på spørsmål — automatisk.</p>
+          <p class="portfolio-tagline">Myk pastell og feminin eleganse. Kundene bestiller time og får svar på spørsmål — automatisk.</p>
           <span class="portfolio-cta">Se demo &rarr;</span>
         </div>
       </a>
@@ -869,55 +868,6 @@
         </div>
       </a>
 
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="kontakt">
-    <p class="label-caps reveal">Kontakt</p>
-    <h2 class="section-title reveal">La oss høre<br>om din bedrift.</h2>
-
-    <div class="contact-grid">
-      <div class="reveal">
-        <div class="contact-info-item">
-          <p class="contact-info-label">E-post</p>
-          <p class="contact-info-value">kaushik7244@gmail.com</p>
-        </div>
-        <div class="contact-info-item">
-          <p class="contact-info-label">Telefon</p>
-          <p class="contact-info-value">+47 97313147</p>
-        </div>
-        <div class="contact-info-item">
-          <p class="contact-info-label">Tilgjengelighet</p>
-          <p class="contact-info-value">Lørdager og Mandager</p>
-        </div>
-        <div class="contact-info-item">
-          <p class="contact-info-label">Responstid</p>
-          <p class="contact-info-value">Vi svarer innen 24 timer</p>
-        </div>
-      </div>
-
-      <div class="reveal">
-        <form action="https://formspree.io/f/meedalga" method="POST">
-          <div class="form-field">
-            <label class="form-label" for="name">Ditt navn</label>
-            <input class="form-input" id="name" name="name" type="text" required />
-          </div>
-          <div class="form-field">
-            <label class="form-label" for="email">E-post</label>
-            <input class="form-input" id="email" name="email" type="email" required />
-          </div>
-          <div class="form-field">
-            <label class="form-label" for="business">Hva slags bedrift?</label>
-            <input class="form-input" id="business" name="business" type="text" />
-          </div>
-          <div class="form-field">
-            <label class="form-label" for="message">Melding</label>
-            <textarea class="form-textarea form-input" id="message" name="message"></textarea>
-          </div>
-          <button type="submit" class="form-submit">Send melding</button>
-        </form>
-      </div>
     </div>
   </section>
 

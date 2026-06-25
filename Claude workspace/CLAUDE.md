@@ -125,20 +125,6 @@ All three booking pages (`booking-*.html`) are **demo only** — forms do not su
 
 Commit email **must** be `kaushik7244@gmail.com` — Vercel rejects deployments from other authors.
 
-## Text rehumanize workflow
-
-Tooling for rewriting/humanizing all visible website copy without touching markup lives in `Solvr/rehumanize/`:
-- `text_tool.py` — offset-based extract/reinsert tool (uses Python `html.parser`, no external deps beyond stdlib).
-- `website-texts.map.json` — canonical mapping (id → file, kind, position, original). Do not hand-edit.
-- `REHUMANIZE-tekster.txt` — flat file with one numbered segment per text bit (`=== 001 ===`), grouped by `########## FIL: <name> ##########`.
-
-Usage:
-```bash
-python3 text_tool.py extract  <html_dir>                 # writes map.json + REHUMANIZE-tekster.txt
-python3 text_tool.py reinsert <html_dir> <edited_txt>    # splices edited text back into the HTML
-```
-The reinsert is **byte-exact**: it only replaces the changed text spans (preserving entities like `&rarr;`, inline tags, indentation, attribute order). Duplicate strings are handled by position, not string match. Round-trip on unedited text yields a 0-byte diff. Editing rule: keep all `===`/`##########` lines and the segment count/order intact; only rewrite the text under each marker.
-
 ## Git in the Cowork sandbox (works — simpler than mktree)
 
 In this environment normal git **does** work. `git add <paths>` + `git commit -- <paths>` succeeds even though it prints `unable to unlink ... Operation not permitted` warnings (non-fatal). The heavy `commit-tree`/`mktree` workflow above is only needed if normal commit truly fails. After committing, clear leftover locks so GitHub Desktop is happy:

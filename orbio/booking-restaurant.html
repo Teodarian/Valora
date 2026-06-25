@@ -27,6 +27,37 @@
       flex-direction: column;
     }
 
+    /* ── DEMO BAR ── */
+    .demo-bar {
+      height: 36px;
+      background: var(--terra);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      flex-shrink: 0;
+    }
+
+    .demo-bar a {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      opacity: 0.9;
+    }
+
+    .demo-bar a:hover { opacity: 1; text-decoration: underline; }
+
+    .demo-bar-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+
     /* ── TOPBAR ── */
     .topbar {
       height: 48px;
@@ -38,13 +69,9 @@
       background: var(--bg);
     }
 
-    .topbar-left {
-      display: flex;
-      gap: 24px;
-    }
+    .topbar-left { display: flex; gap: 24px; }
 
     .topbar a {
-      font-family: 'Manrope', sans-serif;
       font-size: 11px;
       font-weight: 600;
       letter-spacing: 0.14em;
@@ -52,9 +79,6 @@
       text-decoration: none;
       color: var(--muted);
       transition: color 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     .topbar a:hover { color: var(--terra); }
@@ -66,13 +90,46 @@
       color: var(--text);
     }
 
+    /* ── DEMO NOTICE ── */
+    .demo-notice {
+      background: rgba(184,92,56,0.08);
+      border: 1px solid rgba(184,92,56,0.25);
+      border-radius: 4px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      max-width: 520px;
+      width: 100%;
+      margin-bottom: 32px;
+    }
+
+    .demo-notice-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+
+    .demo-notice-text {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .demo-notice-text strong {
+      font-weight: 600;
+      color: var(--terra);
+      display: block;
+      margin-bottom: 2px;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
     /* ── MAIN ── */
     main {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 72px 24px 96px;
+      padding: 64px 24px 80px;
     }
 
     .page-label {
@@ -103,14 +160,14 @@
       text-align: center;
       max-width: 400px;
       line-height: 1.7;
-      margin-bottom: 56px;
+      margin-bottom: 48px;
     }
 
     .divider {
       width: 40px;
       height: 1px;
       background: var(--terra);
-      margin: 0 auto 56px;
+      margin: 0 auto 48px;
       opacity: 0.6;
     }
 
@@ -202,6 +259,7 @@
 
     .success.show { display: flex; }
     .booking-form.hide { display: none; }
+    .demo-notice.hide { display: none; }
 
     .success-icon {
       width: 56px;
@@ -229,9 +287,20 @@
       line-height: 1.7;
     }
 
+    .success-demo-note {
+      border: 1px solid rgba(184,92,56,0.25);
+      border-radius: 4px;
+      padding: 10px 18px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(184,92,56,0.7);
+    }
+
     .back-btn {
       display: inline-block;
-      margin-top: 8px;
+      margin-top: 4px;
       padding: 14px 32px;
       background: transparent;
       color: var(--muted);
@@ -287,6 +356,11 @@
 </head>
 <body>
 
+  <div class="demo-bar">
+    <a href="index.html">← Tilbake til Orbio</a>
+    <span class="demo-bar-label">Demo</span>
+  </div>
+
   <div class="topbar">
     <div class="topbar-left">
       <a href="index.html">← Orbio</a>
@@ -300,6 +374,14 @@
     <p class="page-label">Reservasjon</p>
     <h1 class="page-title">Reserver ditt <em>bord</em></h1>
     <div class="divider"></div>
+
+    <div class="demo-notice" id="demoNotice">
+      <span class="demo-notice-icon">🔒</span>
+      <div class="demo-notice-text">
+        <strong>Dette er en demo</strong>
+        Skjemaet er kun for illustrasjon. Ingen informasjon du fyller inn blir lagret eller sendt noe sted.
+      </div>
+    </div>
 
     <form class="booking-form" id="bookingForm">
       <div class="form-row">
@@ -373,8 +455,9 @@
 
     <div class="success" id="successMsg">
       <div class="success-icon">✓</div>
-      <div class="success-title">Reservasjon bekreftet</div>
-      <p class="success-text">Takk! Vi gleder oss til å ta imot deg. En bekreftelse sendes på SMS innen kort tid.</p>
+      <div class="success-title">Ser bra ut!</div>
+      <p class="success-text">Skjemaet ble sendt inn — men dette er bare en demo. Ingen data ble faktisk lagret eller videresendt.</p>
+      <div class="success-demo-note">🔒 Demo — ingen informasjon ble sendt</div>
       <a href="demo-restaurant.html" class="back-btn">← Tilbake til Brasa</a>
     </div>
   </main>
@@ -388,6 +471,7 @@
     document.getElementById('bookingForm').addEventListener('submit', function(e) {
       e.preventDefault();
       this.classList.add('hide');
+      document.getElementById('demoNotice').classList.add('hide');
       document.getElementById('successMsg').classList.add('show');
     });
 

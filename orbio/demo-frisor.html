@@ -4,20 +4,30 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lumina Frisørsalong — Oslo</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Hanken+Grotesk:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #0d0d0d;
-      --bg-1:     #141414;
-      --bg-2:     #1a1a1a;
-      --bg-3:     #262626;
-      --text:     #ffffff;
-      --muted:    #a0a0a0;
-      --gold:     #c9a06a;
-      --gold-dim: rgba(201,160,106,0.3);
-      --outline:  rgba(201,160,106,0.18);
+      --bg:           #fff8f2;
+      --surface-low:  #f9f2ec;
+      --surface:      #f3ede7;
+      --surface-high: #eee7e1;
+      --text:         #1e1b18;
+      --muted:        #504444;
+      --outline:      rgba(130,116,116,0.18);
+      --primary:      #7c5357;
+      --primary-c:    #e8b4b8;
+      --secondary-c:  #cce9dc;
+      --tertiary-c:   #ccbbd7;
+      --r-sm:  0.5rem;
+      --r:     1rem;
+      --r-md:  1.5rem;
+      --r-lg:  2rem;
+      --r-xl:  3rem;
+      --r-full: 9999px;
+      --shadow: 0 8px 32px rgba(61,46,46,0.06);
+      --shadow-hover: 0 16px 48px rgba(61,46,46,0.10);
     }
 
     html { scroll-behavior: smooth; }
@@ -25,7 +35,7 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Hanken Grotesk', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       font-weight: 400;
       font-size: 16px;
       line-height: 1.6;
@@ -38,7 +48,7 @@
       top: 0; left: 0; right: 0;
       z-index: 200;
       height: 36px;
-      background: var(--gold);
+      background: var(--primary-c);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -46,24 +56,22 @@
     }
 
     .demo-bar a {
-      font-family: 'Hanken Grotesk', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #0d0d0d;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--primary);
       text-decoration: none;
     }
 
     .demo-bar a:hover { text-decoration: underline; }
 
     .demo-bar-label {
-      font-family: 'Hanken Grotesk', sans-serif;
       font-size: 10px;
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: rgba(13,13,13,0.6);
+      color: rgba(124,83,87,0.6);
     }
 
     /* ── NAV ── */
@@ -74,255 +82,312 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 64px;
-      height: 64px;
-      background: rgba(13,13,13,0.88);
+      padding: 0 48px;
+      height: 68px;
+      background: rgba(255,248,242,0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--outline);
-      backdrop-filter: blur(20px);
     }
 
     .nav-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
-      font-weight: 400;
+      font-family: 'DM Serif Display', serif;
+      font-size: 24px;
       font-style: italic;
-      letter-spacing: 0.04em;
       color: var(--text);
       text-decoration: none;
+      letter-spacing: 0.01em;
     }
 
     .nav-links {
       display: flex;
-      gap: 40px;
+      gap: 36px;
       list-style: none;
     }
 
     .nav-links a {
-      font-family: 'Hanken Grotesk', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
+      font-size: 13px;
+      font-weight: 500;
       color: var(--muted);
       text-decoration: none;
       transition: color 0.2s;
     }
 
-    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover { color: var(--text); }
 
     .nav-cta {
-      font-family: 'Hanken Grotesk', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      text-decoration: none;
-      border: 1px solid var(--gold);
+      display: inline-block;
       padding: 10px 24px;
-      transition: background 0.2s, color 0.2s;
+      background: var(--primary);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: var(--r-full);
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
     }
 
-    .nav-cta:hover { background: var(--gold); color: var(--bg); }
+    .nav-cta:hover {
+      background: #6b4448;
+      transform: scale(1.02);
+      box-shadow: 0 4px 16px rgba(124,83,87,0.25);
+    }
 
     /* ── HERO ── */
     .hero {
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 120px 64px 80px;
+      padding: 140px 64px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
       position: relative;
-      border-bottom: 1px solid var(--outline);
       overflow: hidden;
     }
 
-    .hero-img {
-      position: absolute;
-      top: 0; right: 0;
-      width: 48%;
-      height: 100%;
-      overflow: hidden;
-      z-index: 0;
-    }
-
-    .hero-img::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to right, var(--bg) 0%, rgba(13,13,13,0.3) 60%, rgba(13,13,13,0.5) 100%);
-    }
-
-    .hero-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.65;
-      filter: grayscale(20%);
-    }
-
-    .hero > *:not(.hero-img) { position: relative; z-index: 1; }
-
-    /* Subtle vertical lines as structural accents */
+    /* Blob accent */
     .hero::before {
       content: '';
       position: absolute;
-      top: 0; bottom: 0;
-      left: 50%;
-      width: 1px;
-      background: var(--outline);
+      top: -120px; right: -80px;
+      width: 600px; height: 600px;
+      background: radial-gradient(ellipse at center, #e8b4b8 0%, #ccbbd7 50%, transparent 75%);
+      opacity: 0.28;
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
       pointer-events: none;
     }
 
-    .hero-label {
-      font-family: 'Hanken Grotesk', sans-serif;
-      font-size: 11px;
+    .hero-left { position: relative; z-index: 1; }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--secondary-c);
+      color: #334c43;
+      font-size: 12px;
       font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 40px;
+      letter-spacing: 0.06em;
+      padding: 6px 16px;
+      border-radius: var(--r-full);
+      margin-bottom: 36px;
       opacity: 0;
       animation: fadeUp 0.6s ease 0.1s forwards;
     }
 
+    .hero-tag::before {
+      content: '';
+      display: inline-block;
+      width: 6px; height: 6px;
+      background: #4a645a;
+      border-radius: 50%;
+    }
+
     .hero-headline {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(48px, 7vw, 96px);
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(44px, 5.5vw, 80px);
       font-weight: 400;
-      line-height: 1.08;
-      letter-spacing: -0.02em;
+      line-height: 1.1;
       color: var(--text);
-      max-width: 740px;
+      margin-bottom: 28px;
       opacity: 0;
       animation: fadeUp 0.6s ease 0.25s forwards;
     }
 
-    .hero-headline em { color: var(--gold); font-style: italic; }
+    .hero-headline span {
+      color: var(--primary);
+    }
 
     .hero-sub {
       font-size: 17px;
       font-weight: 300;
       color: var(--muted);
-      margin-top: 36px;
-      max-width: 440px;
-      line-height: 1.7;
-      letter-spacing: 0.01em;
+      line-height: 1.75;
+      max-width: 420px;
+      margin-bottom: 48px;
       opacity: 0;
       animation: fadeUp 0.6s ease 0.4s forwards;
     }
 
     .hero-actions {
-      margin-top: 56px;
       display: flex;
-      gap: 20px;
+      gap: 16px;
       align-items: center;
       opacity: 0;
       animation: fadeUp 0.6s ease 0.55s forwards;
     }
 
-    .btn-gold {
+    .btn-primary {
       display: inline-block;
-      padding: 16px 40px;
+      padding: 16px 36px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: var(--r-full);
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #6b4448;
+      transform: scale(1.02);
+      box-shadow: 0 6px 24px rgba(124,83,87,0.28);
+    }
+
+    .btn-ghost {
+      display: inline-block;
+      padding: 15px 32px;
       background: transparent;
-      color: var(--gold);
-      font-family: 'Hanken Grotesk', sans-serif;
-      font-size: 11px;
+      color: var(--primary);
+      font-size: 14px;
       font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
       text-decoration: none;
-      border: 1px solid var(--gold);
-      transition: background 0.2s, color 0.2s;
+      border-radius: var(--r-full);
+      border: 1.5px solid var(--primary-c);
+      transition: background 0.2s, border-color 0.2s;
     }
 
-    .btn-gold:hover { background: var(--gold); color: var(--bg); }
+    .btn-ghost:hover {
+      background: var(--surface-low);
+      border-color: var(--primary);
+    }
 
-    .btn-text {
-      display: inline-block;
-      font-family: 'Hanken Grotesk', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
+    .hero-right {
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.3s forwards;
+    }
+
+    .hero-img-wrap {
+      position: relative;
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-hover);
+      aspect-ratio: 4/5;
+    }
+
+    .hero-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Floating badge */
+    .hero-badge {
+      position: absolute;
+      bottom: 28px;
+      left: -28px;
+      background: #fff;
+      border-radius: var(--r-lg);
+      padding: 16px 20px;
+      box-shadow: var(--shadow-hover);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hero-badge-num {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 28px;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .hero-badge-label {
+      font-size: 12px;
+      font-weight: 500;
       color: var(--muted);
-      text-decoration: none;
-      padding-bottom: 2px;
-      border-bottom: 1px solid transparent;
-      transition: color 0.2s, border-color 0.2s;
     }
 
-    .btn-text:hover { color: var(--text); border-bottom-color: var(--text); }
+    /* ── SHARED ── */
+    section { padding: 100px 64px; }
 
-    /* ── SHARED SECTION ── */
-    section { padding: 120px 64px; border-bottom: 1px solid var(--outline); }
-
-    .section-label {
-      font-family: 'Hanken Grotesk', sans-serif;
-      font-size: 11px;
+    .section-chip {
+      display: inline-block;
+      background: var(--primary-c);
+      color: var(--primary);
+      font-size: 12px;
       font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 24px;
+      letter-spacing: 0.06em;
+      padding: 5px 14px;
+      border-radius: var(--r-full);
+      margin-bottom: 20px;
     }
 
     .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(32px, 4vw, 56px);
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(32px, 3.5vw, 52px);
       font-weight: 400;
       line-height: 1.15;
-      letter-spacing: -0.02em;
       color: var(--text);
-      margin-bottom: 60px;
+      margin-bottom: 56px;
     }
 
     /* ── TJENESTER ── */
-    #tjenester { background: var(--bg-1); }
+    #tjenester { background: var(--surface-low); }
 
     .services-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      border: 1px solid var(--outline);
+      gap: 24px;
     }
 
     .service-card {
-      padding: 48px 40px;
-      border-right: 1px solid var(--outline);
+      background: #fff;
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      transition: transform 0.25s, box-shadow 0.25s;
     }
 
-    .service-card:last-child { border-right: none; }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
 
     .service-img {
-      width: calc(100% + 48px);
-      margin: -36px -24px 28px;
+      width: 100%;
       aspect-ratio: 4/3;
       object-fit: cover;
       display: block;
-      filter: grayscale(15%);
-      opacity: 0.85;
-      transition: opacity 0.3s, filter 0.3s;
+      transition: transform 0.4s ease;
     }
 
-    .service-card:hover .service-img { opacity: 1; filter: grayscale(0%); }
+    .service-card:hover .service-img { transform: scale(1.03); }
 
-    .service-tag {
-      font-family: 'Hanken Grotesk', sans-serif;
-      font-size: 10px;
+    .service-body {
+      padding: 28px 28px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .service-chip {
+      display: inline-block;
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      padding-left: 12px;
-      border-left: 2px solid var(--gold);
+      letter-spacing: 0.06em;
+      padding: 4px 12px;
+      border-radius: var(--r-full);
+      width: fit-content;
     }
+
+    .chip-rose    { background: rgba(232,180,184,0.3); color: #6b4448; }
+    .chip-mint    { background: rgba(204,233,220,0.4); color: #334c43; }
+    .chip-lavender{ background: rgba(204,187,215,0.35); color: #4e4259; }
 
     .service-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 26px;
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 24px;
       font-weight: 400;
       color: var(--text);
       line-height: 1.2;
@@ -333,17 +398,16 @@
       font-weight: 300;
       color: var(--muted);
       line-height: 1.65;
-      letter-spacing: 0.01em;
+      flex: 1;
     }
 
     .service-price {
-      margin-top: auto;
-      font-family: 'Playfair Display', serif;
-      font-size: 18px;
-      font-weight: 400;
-      color: var(--gold);
-      padding-top: 20px;
-      border-top: 1px solid var(--outline);
+      display: inline-block;
+      margin-top: 8px;
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 20px;
+      color: var(--primary);
     }
 
     /* ── OM OSS ── */
@@ -352,7 +416,7 @@
     .om-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 100px;
+      gap: 80px;
       align-items: center;
     }
 
@@ -361,111 +425,112 @@
       font-weight: 300;
       color: var(--muted);
       line-height: 1.8;
-      letter-spacing: 0.01em;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
-    .om-text strong { color: var(--text); font-weight: 400; }
+    .om-text strong { color: var(--text); font-weight: 500; }
 
     .om-divider {
-      width: 40px;
-      height: 1px;
-      background: var(--gold);
-      margin: 32px 0;
+      width: 48px;
+      height: 3px;
+      background: var(--primary-c);
+      border-radius: var(--r-full);
+      margin: 28px 0;
     }
 
     .om-right {
       display: flex;
       flex-direction: column;
-      gap: 0;
-      border: 1px solid var(--outline);
+      gap: 16px;
+    }
+
+    .om-img-wrap {
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      aspect-ratio: 3/4;
+      margin-bottom: 8px;
+    }
+
+    .om-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .om-facts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
     }
 
     .om-fact {
-      padding: 32px 36px;
-      border-bottom: 1px solid var(--outline);
+      background: var(--surface-low);
+      border-radius: var(--r-md);
+      padding: 20px 20px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
 
-    .om-fact:last-child { border-bottom: none; }
-
     .om-fact-label {
-      font-family: 'Hanken Grotesk', sans-serif;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--gold);
+      color: var(--primary);
     }
 
     .om-fact-value {
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 18px;
       font-weight: 400;
       color: var(--text);
     }
 
-    /* ── CHATBOT ── */
-    #chat { background: var(--bg-1); }
-
-    .chat-intro {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      margin-bottom: 64px;
-      align-items: end;
+    /* ── BESTILL CTA ── */
+    #cta {
+      background: linear-gradient(135deg, var(--tertiary-c) 0%, var(--primary-c) 100%);
+      text-align: center;
+      padding: 100px 64px;
     }
 
-    .chat-desc {
-      font-size: 16px;
+    #cta .section-title {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .cta-desc {
+      font-size: 17px;
       font-weight: 300;
       color: var(--muted);
-      line-height: 1.75;
-      letter-spacing: 0.01em;
+      max-width: 440px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
     }
 
-    .chat-open-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 32px;
-      background: transparent;
-      color: var(--gold);
-      font-family: 'Hanken Grotesk', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border: 1px solid var(--gold);
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-      margin-top: 32px;
-    }
-
-    .chat-open-btn:hover { background: var(--gold); color: var(--bg); }
-
-    /* ── FLOATING CHAT ── */
+    /* ── CHAT ── */
+    /* Floating chat bubble */
     .fchat-bubble {
       position: fixed;
       bottom: 28px;
       right: 28px;
-      width: 58px;
-      height: 58px;
-      background: var(--gold);
+      width: 56px;
+      height: 56px;
+      background: var(--primary);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       z-index: 1000;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 20px rgba(124,83,87,0.35);
       transition: transform 0.2s, background 0.2s;
     }
 
-    .fchat-bubble:hover { transform: scale(1.07); background: #b8893a; }
+    .fchat-bubble:hover { transform: scale(1.07); background: #6b4448; }
 
     .fchat-bubble svg { transition: opacity 0.2s, transform 0.2s; }
     .fchat-bubble.open .icon-chat { opacity: 0; transform: scale(0.5); position: absolute; }
@@ -478,14 +543,14 @@
       right: 28px;
       width: 380px;
       height: 560px;
-      background: var(--bg-2);
-      border: 1px solid var(--outline);
-      border-radius: 2px;
+      background: #fff;
+      border-radius: var(--r-lg);
       overflow: hidden;
       z-index: 999;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 12px 48px rgba(0,0,0,0.6);
+      box-shadow: 0 16px 56px rgba(61,46,46,0.14);
+      border: 1px solid var(--outline);
       opacity: 0;
       pointer-events: none;
       transform: translateY(16px) scale(0.97);
@@ -504,8 +569,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 14px 20px;
-      background: var(--bg-3);
-      border-bottom: 1px solid var(--outline);
+      background: var(--primary);
       flex-shrink: 0;
     }
 
@@ -516,33 +580,30 @@
     }
 
     .fchat-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--gold);
+      width: 8px; height: 8px;
+      background: var(--primary-c);
       border-radius: 50%;
     }
 
     .fchat-title {
-      font-family: 'Hanken Grotesk', sans-serif;
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 600;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--gold);
+      color: #fff;
+      letter-spacing: 0.04em;
     }
 
     .fchat-close-btn {
       background: none;
       border: none;
-      color: var(--muted);
-      font-size: 20px;
+      color: rgba(255,255,255,0.7);
+      font-size: 22px;
       line-height: 1;
       cursor: pointer;
       padding: 0 2px;
       transition: color 0.2s;
     }
 
-    .fchat-close-btn:hover { color: var(--text); }
+    .fchat-close-btn:hover { color: #fff; }
 
     .fchat-popup iframe {
       flex: 1;
@@ -558,19 +619,18 @@
     /* ── FOOTER ── */
     footer {
       padding: 48px 64px;
-      background: var(--bg);
-      border-top: 1px solid var(--outline);
+      background: var(--surface);
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
       gap: 40px;
+      border-top: 1px solid var(--outline);
     }
 
     .footer-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 18px;
-      font-weight: 400;
+      font-family: 'DM Serif Display', serif;
       font-style: italic;
+      font-size: 22px;
       color: var(--text);
     }
 
@@ -578,39 +638,36 @@
       text-align: center;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
     }
 
     .footer-info p {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 300;
       color: var(--muted);
-      letter-spacing: 0.06em;
     }
 
     .footer-orbio {
       text-align: right;
-      font-family: 'Hanken Grotesk', sans-serif;
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 600;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--bg-3);
+      letter-spacing: 0.08em;
+      color: var(--surface-high);
     }
 
     .footer-orbio a {
-      color: var(--bg-3);
+      color: var(--muted);
       text-decoration: none;
       transition: color 0.2s;
     }
 
-    .footer-orbio a:hover { color: var(--gold); }
+    .footer-orbio a:hover { color: var(--primary); }
 
     /* ── REVEAL ── */
     .reveal {
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transform: translateY(24px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
     }
 
     .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -622,16 +679,17 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 960px) {
-      nav { padding: 0 24px; }
+      nav { padding: 0 20px; }
       .nav-links { display: none; }
-      .hero { padding: 100px 24px 64px; }
-      section { padding: 80px 24px; }
+      .hero { grid-template-columns: 1fr; padding: 120px 24px 64px; gap: 40px; }
+      .hero-right { display: none; }
+      section { padding: 72px 24px; }
+      #cta { padding: 72px 24px; }
       .services-grid { grid-template-columns: 1fr; }
-      .service-card { border-right: none; border-bottom: 1px solid var(--outline); }
-      .service-card:last-child { border-bottom: none; }
-      .om-grid { grid-template-columns: 1fr; gap: 48px; }
-      .chat-intro { grid-template-columns: 1fr; gap: 32px; }
-      footer { grid-template-columns: 1fr; text-align: center; }
+      .om-grid { grid-template-columns: 1fr; gap: 40px; }
+      .om-right { order: -1; }
+      .om-img-wrap { aspect-ratio: 16/9; }
+      footer { grid-template-columns: 1fr; text-align: center; gap: 20px; }
       .footer-orbio { text-align: center; }
     }
   </style>
@@ -650,55 +708,74 @@
     <ul class="nav-links">
       <li><a href="#tjenester">Tjenester</a></li>
       <li><a href="#om">Om oss</a></li>
-      <li><a href="#chat">Kontakt</a></li>
+      <li><a href="#cta">Kontakt</a></li>
     </ul>
     <a href="booking-frisor.html" class="nav-cta">Bestill time</a>
   </nav>
 
   <!-- HERO -->
   <div class="hero">
-    <div class="hero-img">
-      <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80" alt="Lumina frisørsalong" />
+    <div class="hero-left">
+      <div class="hero-tag">Frisørsalong — Oslo sentrum</div>
+      <h1 class="hero-headline">
+        Håret ditt,<br><span>din identitet.</span>
+      </h1>
+      <p class="hero-sub">
+        Lumina er din rolige, eksklusive frisørsalong i Oslo. Vi kombinerer nordisk estetikk med omsorgsfull teknikk fra erfarne stylister.
+      </p>
+      <div class="hero-actions">
+        <a href="booking-frisor.html" class="btn-primary">Bestill time</a>
+        <a href="#tjenester" class="btn-ghost">Se tjenester</a>
+      </div>
     </div>
-    <p class="hero-label">Frisørsalong — Oslo sentrum</p>
-    <h1 class="hero-headline">
-      Skjønnhet<br>er en <em>kunst.</em>
-    </h1>
-    <p class="hero-sub">
-      Lumina er din eksklusive frisørsalong i Oslo. Vi kombinerer nordisk estetikk med håndverket til erfarne stylister.
-    </p>
-    <div class="hero-actions">
-      <a href="booking-frisor.html" class="btn-gold">Bestill time</a>
-      <a href="#tjenester" class="btn-text">Se tjenester</a>
+
+    <div class="hero-right">
+      <div class="hero-img-wrap">
+        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80" alt="Lumina frisørsalong" />
+      </div>
+      <div class="hero-badge">
+        <span class="hero-badge-num">10+</span>
+        <span class="hero-badge-label">År i bransjen</span>
+      </div>
     </div>
   </div>
 
   <!-- TJENESTER -->
   <section id="tjenester">
-    <p class="section-label reveal">Tjenester</p>
-    <h2 class="section-title reveal">Hva vi tilbyr</h2>
+    <div class="reveal">
+      <span class="section-chip">Tjenester</span>
+      <h2 class="section-title">Det vi gjør best</h2>
+    </div>
 
     <div class="services-grid reveal">
       <div class="service-card">
-        <img class="service-img" src="https://images.unsplash.com/photo-1711274093746-b588a17d2716?auto=format&fit=crop&w=600&q=80" alt="Klipp og styling" />
-        <div class="service-tag">Klassisk</div>
-        <div class="service-name">Klipp & Styling</div>
-        <p class="service-desc">Skreddersydd klipp og styling tilpasset ditt hår og din stil. Inkluderer konsultasjon, vask og finish.</p>
-        <div class="service-price">Fra 590 kr</div>
+        <img class="service-img" src="https://images.unsplash.com/photo-1711274093746-b588a17d2716?auto=format&fit=crop&w=700&q=80" alt="Klipp og styling" />
+        <div class="service-body">
+          <span class="service-chip chip-rose">Klassisk</span>
+          <div class="service-name">Klipp & Styling</div>
+          <p class="service-desc">Skreddersydd klipp og styling tilpasset ditt hår og din stil. Inkluderer konsultasjon, vask og finish.</p>
+          <span class="service-price">Fra 590 kr</span>
+        </div>
       </div>
+
       <div class="service-card">
-        <img class="service-img" src="https://images.unsplash.com/photo-1605980766335-d3a41c7332a1?auto=format&fit=crop&w=600&q=80" alt="Fargebehandling" />
-        <div class="service-tag">Farge</div>
-        <div class="service-name">Fargebehandling</div>
-        <p class="service-desc">Heldekkende farge, highlights eller balayage. Vi bruker kun profesjonelle produkter av høy kvalitet.</p>
-        <div class="service-price">Fra 890 kr</div>
+        <img class="service-img" src="https://images.unsplash.com/photo-1605980766335-d3a41c7332a1?auto=format&fit=crop&w=700&q=80" alt="Fargebehandling" />
+        <div class="service-body">
+          <span class="service-chip chip-lavender">Farge</span>
+          <div class="service-name">Fargebehandling</div>
+          <p class="service-desc">Heldekkende farge, highlights eller balayage. Vi bruker kun profesjonelle produkter av høy kvalitet.</p>
+          <span class="service-price">Fra 890 kr</span>
+        </div>
       </div>
+
       <div class="service-card">
-        <img class="service-img" src="https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?auto=format&fit=crop&w=600&q=80" alt="Hårpleie" />
-        <div class="service-tag">Behandling</div>
-        <div class="service-name">Hårpleie & Mask</div>
-        <p class="service-desc">Intensiv hårpleie for tørt, skadet eller kresent hår. Gjenoppbygging av struktur og glans.</p>
-        <div class="service-price">Fra 490 kr</div>
+        <img class="service-img" src="https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?auto=format&fit=crop&w=700&q=80" alt="Hårpleie" />
+        <div class="service-body">
+          <span class="service-chip chip-mint">Behandling</span>
+          <div class="service-name">Hårpleie & Mask</div>
+          <p class="service-desc">Intensiv hårpleie for tørt, skadet eller kresent hår. Gjenoppbygging av struktur og glans.</p>
+          <span class="service-price">Fra 490 kr</span>
+        </div>
       </div>
     </div>
   </section>
@@ -707,8 +784,8 @@
   <section id="om">
     <div class="om-grid">
       <div class="reveal">
-        <p class="section-label">Om Lumina</p>
-        <h2 class="section-title" style="margin-bottom:32px;">Erfaring du<br>kan kjenne.</h2>
+        <span class="section-chip">Om Lumina</span>
+        <h2 class="section-title" style="margin-bottom:24px;">Erfaring du<br>kan kjenne.</h2>
         <p class="om-text">
           Lumina ble grunnlagt med én visjon: å tilby en rolig, eksklusiv salonopplevelse i hjertet av Oslo. Vi tror at et besøk hos oss skal føles som en pause fra hverdagen.
         </p>
@@ -719,59 +796,48 @@
       </div>
 
       <div class="om-right reveal">
-        <img src="https://images.unsplash.com/photo-1559599101-f09722fb4948?auto=format&fit=crop&w=800&q=80" alt="Lumina salong" style="width:100%;aspect-ratio:3/4;object-fit:cover;margin-bottom:28px;opacity:0.85;filter:grayscale(10%);" />
-        <div class="om-fact">
-          <span class="om-fact-label">Åpningstider</span>
-          <span class="om-fact-value">Tirsdag — Lørdag</span>
+        <div class="om-img-wrap">
+          <img src="https://images.unsplash.com/photo-1559599101-f09722fb4948?auto=format&fit=crop&w=800&q=80" alt="Lumina salong teamet" />
         </div>
-        <div class="om-fact">
-          <span class="om-fact-label">Adresse</span>
-          <span class="om-fact-value">Bogstadveien 12, Oslo</span>
-        </div>
-        <div class="om-fact">
-          <span class="om-fact-label">Tlf</span>
-          <span class="om-fact-value">+47 22 00 00 00</span>
-        </div>
-        <div class="om-fact">
-          <span class="om-fact-label">Erfaring</span>
-          <span class="om-fact-value">Over 10 år i bransjen</span>
+        <div class="om-facts">
+          <div class="om-fact">
+            <span class="om-fact-label">Åpningstider</span>
+            <span class="om-fact-value">Tir — Lør</span>
+          </div>
+          <div class="om-fact">
+            <span class="om-fact-label">Erfaring</span>
+            <span class="om-fact-value">10+ år</span>
+          </div>
+          <div class="om-fact" style="grid-column: span 2;">
+            <span class="om-fact-label">Adresse</span>
+            <span class="om-fact-value">Bogstadveien 12, Oslo</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CHATBOT -->
-  <section id="chat">
-    <div class="chat-intro">
-      <div class="reveal">
-        <p class="section-label">Bestill & Spør</p>
-        <h2 class="section-title" style="margin-bottom:16px;">Vi er tilgjengelige<br><em>når du trenger oss.</em></h2>
-        <p class="chat-desc">
-          Bruk chatten til å bestille time, spørre om priser eller behandlinger. Chatten er tilgjengelig hele døgnet og svarer deg umiddelbart.
-        </p>
-      </div>
-      <div class="reveal" style="display:flex;flex-direction:column;gap:16px;">
-        <div class="om-fact" style="border:1px solid var(--outline);">
-          <span class="om-fact-label">Responstid</span>
-          <span class="om-fact-value" style="font-size:18px;">Øyeblikkelig svar</span>
-        </div>
-        <div class="om-fact" style="border:1px solid var(--outline);">
-          <span class="om-fact-label">Tilgjengelig</span>
-          <span class="om-fact-value" style="font-size:18px;">24 timer i døgnet</span>
-        </div>
+  <!-- CTA / BESTILL -->
+  <section id="cta">
+    <div class="reveal">
+      <span class="section-chip">Klar for forvandling?</span>
+      <h2 class="section-title">Bestill din time<br>i dag.</h2>
+      <p class="cta-desc">
+        Bruk vår enkle booking for å finne en ledig tid som passer deg. Chatten hjelper deg gjerne hvis du har spørsmål.
+      </p>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+        <a href="booking-frisor.html" class="btn-primary">Bestill time →</a>
+        <button onclick="toggleFChat()" class="btn-ghost" style="cursor:pointer;border:none;background:rgba(255,255,255,0.7);color:var(--primary);padding:15px 32px;border-radius:var(--r-full);font-size:14px;font-weight:600;font-family:inherit;">
+          Chat med oss
+        </button>
       </div>
     </div>
-
-    <button class="chat-open-btn reveal" onclick="toggleFChat()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Start chat
-    </button>
   </section>
 
   <!-- FLOATING CHAT -->
   <div class="fchat-bubble" id="fChatBubble" onclick="toggleFChat()">
-    <svg class="icon-chat" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-    <svg class="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    <svg class="icon-chat" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <svg class="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
   </div>
 
   <div class="fchat-popup" id="fChatPopup">

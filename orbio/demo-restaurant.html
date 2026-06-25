@@ -664,6 +664,73 @@
       .fchat-popup { width: calc(100vw - 16px); right: 8px; bottom: 88px; }
     }
 
+    /* ── KONTAKT ── */
+    #kontakt {
+      background: var(--bg-1);
+      padding: 64px 64px;
+      border-top: 1px solid var(--outline);
+    }
+
+    .kontakt-overline {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--terra);
+      margin-bottom: 16px;
+    }
+
+    .kontakt-heading {
+      font-family: 'EB Garamond', serif;
+      font-size: 42px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+
+    .kontakt-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--outline);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .kontakt-item {
+      padding: 28px 32px;
+      border-right: 1px solid var(--outline);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .kontakt-item:last-child { border-right: none; }
+
+    .kontakt-item-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--terra);
+    }
+
+    .kontakt-item-value {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 720px) {
+      #kontakt { padding: 48px 24px; }
+      .kontakt-heading { font-size: 32px; }
+      .kontakt-grid { grid-template-columns: 1fr; }
+      .kontakt-item { border-right: none; border-bottom: 1px solid var(--outline); }
+      .kontakt-item:last-child { border-bottom: none; }
+    }
+
     /* ── FOOTER ── */
     footer {
       padding: 48px 64px;
@@ -768,6 +835,7 @@
       <li><a href="#meny">Meny</a></li>
       <li><a href="#om">Om oss</a></li>
       <li><a href="booking-restaurant.html">Reserver</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
     </ul>
     <a href="booking-restaurant.html" class="nav-reserve">Reserver bord</a>
   </nav>
@@ -908,6 +976,26 @@
         </div>
       </div>
 
+    </div>
+  </section>
+
+  <!-- KONTAKT -->
+  <section id="kontakt">
+    <p class="kontakt-overline">Kontakt</p>
+    <h2 class="kontakt-heading">Finn oss</h2>
+    <div class="kontakt-grid">
+      <div class="kontakt-item">
+        <span class="kontakt-item-label">Adresse</span>
+        <span class="kontakt-item-value">Aker Brygge 14<br>0250 Oslo</span>
+      </div>
+      <div class="kontakt-item">
+        <span class="kontakt-item-label">E-post</span>
+        <span class="kontakt-item-value">post@brasa-oslo.no</span>
+      </div>
+      <div class="kontakt-item">
+        <span class="kontakt-item-label">Telefon</span>
+        <span class="kontakt-item-value">+47 23 00 00 00</span>
+      </div>
     </div>
   </section>
 

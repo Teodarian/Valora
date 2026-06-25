@@ -641,6 +641,54 @@
       .fchat-popup { width: calc(100vw - 16px); right: 8px; bottom: 88px; }
     }
 
+    /* ── KONTAKT ── */
+    #kontakt {
+      background: var(--surface);
+      padding: 64px 64px;
+    }
+
+    .kontakt-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1.5px solid var(--outline);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      margin-top: 40px;
+    }
+
+    .kontakt-item {
+      padding: 32px 36px;
+      border-right: 1.5px solid var(--outline);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .kontakt-item:last-child { border-right: none; }
+
+    .kontakt-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    .kontakt-value {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 720px) {
+      #kontakt { padding: 48px 24px; }
+      .kontakt-grid { grid-template-columns: 1fr; }
+      .kontakt-item { border-right: none; border-bottom: 1.5px solid var(--outline); }
+      .kontakt-item:last-child { border-bottom: none; }
+    }
+
     /* ── FOOTER ── */
     footer {
       padding: 48px 64px;
@@ -733,7 +781,7 @@
     <ul class="nav-links">
       <li><a href="#tjenester">Tjenester</a></li>
       <li><a href="#om">Om oss</a></li>
-      <li><a href="#cta">Kontakt</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
     </ul>
     <a href="booking-frisor.html" class="nav-cta">Bestill time</a>
   </nav>
@@ -852,6 +900,26 @@
       </p>
       <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
         <a href="booking-frisor.html" class="btn-primary">Bestill time →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- KONTAKT -->
+  <section id="kontakt">
+    <span class="section-chip">Kontakt</span>
+    <h2 class="section-title">Finn oss</h2>
+    <div class="kontakt-grid">
+      <div class="kontakt-item">
+        <span class="kontakt-label">Adresse</span>
+        <span class="kontakt-value">Bogstadveien 24<br>0355 Oslo</span>
+      </div>
+      <div class="kontakt-item">
+        <span class="kontakt-label">E-post</span>
+        <span class="kontakt-value">post@lumina-frisor.no</span>
+      </div>
+      <div class="kontakt-item">
+        <span class="kontakt-label">Telefon</span>
+        <span class="kontakt-value">+47 22 46 00 00</span>
       </div>
     </div>
   </section>

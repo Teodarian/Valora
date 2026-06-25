@@ -664,6 +664,71 @@
       .fchat-popup { width: calc(100vw - 16px); right: 8px; bottom: 88px; }
     }
 
+    /* ── KONTAKT ── */
+    #kontakt {
+      background: var(--bg-1);
+      padding: 64px 64px;
+      border-top: 1px solid var(--outline);
+    }
+
+    .kontakt-label-caps {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 16px;
+    }
+
+    .kontakt-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+
+    .kontakt-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--outline);
+    }
+
+    .kontakt-item {
+      padding: 28px 32px;
+      border-right: 1px solid var(--outline);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .kontakt-item:last-child { border-right: none; }
+
+    .kontakt-item-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--yellow);
+    }
+
+    .kontakt-item-value {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 720px) {
+      #kontakt { padding: 48px 24px; }
+      .kontakt-heading { font-size: 36px; }
+      .kontakt-grid { grid-template-columns: 1fr; }
+      .kontakt-item { border-right: none; border-bottom: 1px solid var(--outline); }
+      .kontakt-item:last-child { border-bottom: none; }
+    }
+
     /* ── FOOTER ── */
     footer {
       padding: 0 64px;
@@ -747,7 +812,7 @@
     <ul class="nav-links">
       <li><a href="#klasser">Klasser</a></li>
       <li><a href="#medlemskap">Medlemskap</a></li>
-      <li><a href="#chat">Chat</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
     </ul>
     <a href="booking-gym.html" class="nav-cta">Bli medlem</a>
   </nav>
@@ -893,6 +958,26 @@
       </div>
     </div>
 
+  </section>
+
+  <!-- KONTAKT -->
+  <section id="kontakt">
+    <p class="kontakt-label-caps">Kontakt</p>
+    <h2 class="kontakt-heading">Finn oss.</h2>
+    <div class="kontakt-grid">
+      <div class="kontakt-item">
+        <span class="kontakt-item-label">Adresse</span>
+        <span class="kontakt-item-value">Grünerløkka Idrettspark<br>0551 Oslo</span>
+      </div>
+      <div class="kontakt-item">
+        <span class="kontakt-item-label">E-post</span>
+        <span class="kontakt-item-value">post@apexoslo.no</span>
+      </div>
+      <div class="kontakt-item">
+        <span class="kontakt-item-label">Telefon</span>
+        <span class="kontakt-item-value">+47 22 12 00 00</span>
+      </div>
+    </div>
   </section>
 
   <!-- FLOATING CHAT -->

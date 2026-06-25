@@ -4,16 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
-This is the **Solvr** monorepo. The active project is **Orbio** — a web agency portfolio with three fictional demo client sites. All Orbio files live in `orbio/`. There is also an unrelated Flask app under `Vendera/`.
+This is the **Solvr** monorepo. The active project is **Weblivo** — a web agency portfolio with three fictional demo client sites. All Weblivo files live in `weblivo/`. There is also an unrelated Flask app under `Vendera/`.
 
-The `orbio/` folder is mirrored to a separate deployment repo at `~/Documents/GitHub/botbyra-portfolio/`. **Every change to `orbio/` must be copied to that repo and committed in both places.**
+The `weblivo/` folder is mirrored to a separate deployment repo at `~/Documents/GitHub/botbyra-portfolio/`. **Every change to `weblivo/` must be copied to that repo and committed in both places.**
 
 ## Repository structure
 
 ```
 Solvr/
-├── orbio/                  # Active project — Orbio portfolio
-│   ├── index.html          # Orbio agency homepage (Space Mono, dark/orange)
+├── weblivo/                  # Active project — Weblivo portfolio
+│   ├── index.html          # Weblivo agency homepage (Space Mono, dark/orange)
 │   ├── demo-frisor.html    # Lumina Frisørsalong demo site
 │   ├── demo-gym.html       # APEX Treningssenter demo site
 │   ├── demo-restaurant.html# Brasa Restaurant demo site
@@ -25,22 +25,22 @@ Solvr/
 │   ├── DESIGN frisør.md    # Lumina design system (pastel, DM Serif Display)
 │   ├── DESIGN gym.md       # APEX design system (dark/yellow, Bebas Neue)
 │   ├── DESIGN resturant.md # Brasa design system (warm dark, EB Garamond)
-│   └── DESIGN hjemmeside.md# Orbio homepage design system
+│   └── DESIGN hjemmeside.md# Weblivo homepage design system
 ├── Context files/          # Session notes (ignore for code tasks)
-├── Vendera/                # Separate Flask app (unrelated to Orbio)
+├── Vendera/                # Separate Flask app (unrelated to Weblivo)
 ├── serve.py / wsgi.py      # Flask entry points for Vendera
 └── botbyra-portfolio/      # Snapshot of old portfolio (not the active deploy target)
 ```
 
 ## Two-repo workflow
 
-All Orbio changes must land in **both** repos:
-1. `~/Documents/GitHub/Solvr/orbio/` — source of truth
+All Weblivo changes must land in **both** repos:
+1. `~/Documents/GitHub/Solvr/weblivo/` — source of truth
 2. `~/Documents/GitHub/botbyra-portfolio/` — Vercel deployment repo (flat, no subdirectory)
 
-After editing files in `orbio/`, copy them:
+After editing files in `weblivo/`, copy them:
 ```bash
-cp Solvr/orbio/<file>.html botbyra-portfolio/<file>.html
+cp Solvr/weblivo/<file>.html botbyra-portfolio/<file>.html
 ```
 
 Then commit both repos (see Git section below).
@@ -76,9 +76,9 @@ echo "$NEW_COMMIT" > .git/refs/heads/main
 git read-tree HEAD
 ```
 
-**Solvr is a monorepo** — when building the root tree for Solvr commits, include ALL subdirectories (`Context files`, `Design`, `Server setup`, `Vendera`, `botbyra-portfolio`, `orbio`) using their existing tree hashes, only replacing the `orbio` subtree:
+**Solvr is a monorepo** — when building the root tree for Solvr commits, include ALL subdirectories (`Context files`, `Design`, `Server setup`, `Vendera`, `botbyra-portfolio`, `weblivo`) using their existing tree hashes, only replacing the `weblivo` subtree:
 ```bash
-ORBIO_TREE=$(printf "..." | git mktree)  # build orbio subtree first
+WEBLIVO_TREE=$(printf "..." | git mktree)  # build weblivo subtree first
 ROOT=$(printf \
   "100644 blob $GI\t.gitignore\n\
 040000 tree $CF\tContext files\n\
@@ -86,7 +86,7 @@ ROOT=$(printf \
 040000 tree $SS\tServer setup\n\
 040000 tree $VE\tVendera\n\
 040000 tree $BP\tbotbyra-portfolio\n\
-040000 tree $ORBIO_TREE\torbio\n\
+040000 tree $WEBLIVO_TREE\tweblivo\n\
 100644 blob $SP\tserve.py\n\
 100644 blob $WP\twsgi.py" | git mktree)
 ```
@@ -100,14 +100,14 @@ Each demo site has its own strict visual identity — always match the correct o
 | Lumina Frisørsalong | `demo-frisor.html` | DM Serif Display (italic headings), Plus Jakarta Sans | bg `#fff8f2`, primary `#7c5357`, primary-container `#e8b4b8` | Pill/ultra-rounded (`--r-full: 9999px`, `--r-lg: 2rem`) |
 | APEX Treningssenter | `demo-gym.html` | Bebas Neue (headings), Inter | bg `#0a0a0a`, yellow `#f5d400` | Sharp/square (border-radius: 0) |
 | Brasa Restaurant | `demo-restaurant.html` | EB Garamond (italic headings), Manrope | bg `#1a1208`, terra `#b85c38`, text `#f1e0ce` | Subtle radius (4px) |
-| Orbio homepage | `index.html` | Space Mono, Inter | bg `#131313`, orange `#ff5c00` | Sharp/pixel aesthetic |
+| Weblivo homepage | `index.html` | Space Mono, Inter | bg `#131313`, orange `#ff5c00` | Sharp/pixel aesthetic |
 
 Full design specs are in `Design/DESIGN <name>.md`.
 
 ## Demo bar (present on all 6 pages)
 
 Every page has a sticky/fixed demo bar at the very top (`z-index: 9999`, height 44px). It contains:
-- Left: pill button(s) linking back — `← Orbio` on demo sites; `← Orbio` + `← [Demo site]` on booking pages
+- Left: pill button(s) linking back — `← Weblivo` on demo sites; `← Weblivo` + `← [Demo site]` on booking pages
 - Right: `• Demo` badge
 
 The bar color matches each site's accent color. CSS class: `.demo-bar-back` (pill style), `.demo-bar-badge`.
@@ -133,12 +133,12 @@ for L in index.lock HEAD.lock next-index-*.lock objects/maintenance.lock refs/he
   [ -e .git/$L ] && mv .git/$L .git/$L.bak
 done
 ```
-Commit only the website files explicitly (e.g. `git commit -- orbio/*.html`) so unrelated staged changes aren't swept in.
+Commit only the website files explicitly (e.g. `git commit -- weblivo/*.html`) so unrelated staged changes aren't swept in.
 
 ## Session handoff — last updated 2026-06-25
 
 State at end of session (switching chats):
-- **Rehumanized all 7 Orbio pages' body copy** (36 text segments) to read more naturally, and **fixed the pixel cursor** in `index.html` (it was solid `#ff5c00`, invisible over the orange "Se demo" buttons — now an orange square with a 1px white border: `width='10' fill='%23ffffff'` wrapping the `8x8` orange).
+- **Rehumanized all 7 Weblivo pages' body copy** (36 text segments) to read more naturally, and **fixed the pixel cursor** in `index.html` (it was solid `#ff5c00`, invisible over the orange "Se demo" buttons — now an orange square with a 1px white border: `width='10' fill='%23ffffff'` wrapping the `8x8` orange).
 - Committed in **both** repos, author `kaushik7244@gmail.com`:
   - Solvr (`Teodarian/Valora`): `566eae4`
   - botbyra-portfolio (`Kaushik7244/botbyra-portfolio`): `8b9e2c5`

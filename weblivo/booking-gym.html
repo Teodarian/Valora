@@ -3,25 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reserver bord — Brasa</title>
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet" />
+  <title>Bli medlem hos APEX Treningssenter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:      #1a1208;
-      --bg-2:    #231a0f;
-      --bg-3:    #32281d;
-      --text:    #f1e0ce;
-      --muted:   #a08070;
-      --terra:   #b85c38;
-      --outline: rgba(241,224,206,0.1);
+      --bg:      #0a0a0a;
+      --bg-2:    #111;
+      --bg-3:    #161616;
+      --text:    #ffffff;
+      --muted:   #666;
+      --yellow:  #f5d400;
+      --outline: rgba(255,255,255,0.08);
     }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Manrope', sans-serif;
+      font-family: 'Inter', sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -33,12 +33,12 @@
       top: 0;
       z-index: 9999;
       height: 44px;
-      background: var(--terra);
+      background: var(--yellow);
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 20px;
-      box-shadow: 0 2px 16px rgba(184,92,56,0.35);
+      box-shadow: 0 2px 16px rgba(245,212,0,0.3);
       flex-shrink: 0;
     }
 
@@ -48,27 +48,27 @@
       gap: 6px;
       font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.04em;
-      color: #f1e0ce;
+      letter-spacing: 0.06em;
+      color: #0a0a0a;
       text-decoration: none;
-      background: rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.12);
       padding: 6px 14px;
       border-radius: 9999px;
-      transition: background 0.2s;
+      transition: background 0.15s;
     }
 
-    .demo-bar-back:hover { background: rgba(255,255,255,0.3); }
+    .demo-bar-back:hover { background: rgba(0,0,0,0.22); }
 
     .demo-bar-badge {
       display: flex;
       align-items: center;
       gap: 7px;
       font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
+      font-weight: 800;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: rgba(241,224,206,0.9);
-      background: rgba(0,0,0,0.15);
+      color: #0a0a0a;
+      background: rgba(0,0,0,0.1);
       padding: 5px 12px;
       border-radius: 9999px;
     }
@@ -78,17 +78,16 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: #f1e0ce;
-      opacity: 0.8;
+      background: #0a0a0a;
+      opacity: 0.6;
       flex-shrink: 0;
     }
 
 
     /* ── DEMO NOTICE ── */
     .demo-notice {
-      background: rgba(184,92,56,0.08);
-      border: 1px solid rgba(184,92,56,0.25);
-      border-radius: 4px;
+      background: rgba(245,212,0,0.07);
+      border: 1px solid rgba(245,212,0,0.2);
       padding: 14px 20px;
       display: flex;
       align-items: flex-start;
@@ -103,17 +102,17 @@
     .demo-notice-text {
       font-size: 13px;
       font-weight: 300;
-      color: var(--muted);
+      color: rgba(255,255,255,0.55);
       line-height: 1.6;
     }
 
     .demo-notice-text strong {
-      font-weight: 600;
-      color: var(--terra);
+      font-weight: 700;
+      color: var(--yellow);
       display: block;
       margin-bottom: 2px;
-      font-size: 11px;
-      letter-spacing: 0.08em;
+      font-size: 10px;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
     }
 
@@ -128,41 +127,40 @@
 
     .page-label {
       font-size: 10px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--terra);
-      margin-bottom: 20px;
+      color: var(--yellow);
+      margin-bottom: 16px;
     }
 
     .page-title {
-      font-family: 'EB Garamond', serif;
-      font-size: clamp(36px, 5vw, 56px);
-      font-weight: 400;
-      line-height: 1.2;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 8vw, 88px);
+      letter-spacing: 0.04em;
       text-align: center;
-      margin-bottom: 12px;
-      color: var(--text);
+      line-height: 1;
+      margin-bottom: 8px;
     }
 
-    .page-title em { font-style: italic; color: var(--terra); }
+    .page-title span { color: var(--yellow); }
 
     .page-sub {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 300;
       color: var(--muted);
       text-align: center;
       max-width: 400px;
       line-height: 1.7;
       margin-bottom: 48px;
+      margin-top: 12px;
     }
 
     .divider {
-      width: 40px;
-      height: 1px;
-      background: var(--terra);
+      width: 48px;
+      height: 2px;
+      background: var(--yellow);
       margin: 0 auto 48px;
-      opacity: 0.6;
     }
 
     /* ── FORM ── */
@@ -171,13 +169,13 @@
       max-width: 520px;
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 20px;
     }
 
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 12px;
     }
 
     .form-group {
@@ -188,32 +186,32 @@
 
     label {
       font-size: 10px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--terra);
+      color: var(--yellow);
     }
 
     input, select, textarea {
       background: var(--bg-2);
       border: 1px solid var(--outline);
       color: var(--text);
-      font-family: 'Manrope', sans-serif;
-      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
       font-weight: 300;
       padding: 14px 18px;
       outline: none;
       appearance: none;
-      transition: border-color 0.2s;
-      border-radius: 4px;
+      transition: border-color 0.15s;
+      border-radius: 0;
       width: 100%;
     }
 
     input::placeholder, textarea::placeholder { color: var(--muted); }
-    input:focus, select:focus, textarea:focus { border-color: var(--terra); }
+    input:focus, select:focus, textarea:focus { border-color: var(--yellow); }
 
     select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23b85c38' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23f5d400' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 16px center;
       padding-right: 40px;
@@ -225,21 +223,20 @@
 
     .submit-btn {
       padding: 18px 0;
-      background: transparent;
-      color: var(--terra);
-      font-family: 'Manrope', sans-serif;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.14em;
+      background: var(--yellow);
+      color: var(--bg);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      border: 1px solid var(--terra);
-      border-radius: 4px;
+      border: none;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s;
+      transition: background 0.15s;
       margin-top: 8px;
     }
 
-    .submit-btn:hover { background: var(--terra); color: var(--text); }
+    .submit-btn:hover { background: #ffffff; }
 
     /* ── SUCCESS ── */
     .success {
@@ -258,38 +255,37 @@
     .success-icon {
       width: 56px;
       height: 56px;
-      border: 1px solid var(--terra);
-      border-radius: 50%;
+      background: var(--yellow);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--terra);
+      color: var(--bg);
       font-size: 22px;
+      font-weight: 700;
     }
 
     .success-title {
-      font-family: 'EB Garamond', serif;
-      font-size: 36px;
-      font-style: italic;
-      color: var(--text);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 0.06em;
+      color: var(--yellow);
     }
 
     .success-text {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 300;
       color: var(--muted);
       line-height: 1.7;
     }
 
     .success-demo-note {
-      border: 1px solid rgba(184,92,56,0.25);
-      border-radius: 4px;
+      border: 1px solid rgba(245,212,0,0.2);
       padding: 10px 18px;
       font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
+      font-weight: 700;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: rgba(184,92,56,0.7);
+      color: rgba(245,212,0,0.6);
     }
 
     .back-btn {
@@ -298,18 +294,17 @@
       padding: 14px 32px;
       background: transparent;
       color: var(--muted);
-      font-family: 'Manrope', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       text-decoration: none;
       border: 1px solid var(--outline);
-      border-radius: 4px;
-      transition: border-color 0.2s, color 0.2s;
+      transition: border-color 0.15s, color 0.15s;
     }
 
-    .back-btn:hover { border-color: var(--terra); color: var(--terra); }
+    .back-btn:hover { border-color: var(--yellow); color: var(--yellow); }
 
     /* ── FOOTER ── */
     footer {
@@ -322,23 +317,23 @@
     }
 
     .footer-name {
-      font-family: 'EB Garamond', serif;
-      font-size: 15px;
-      font-style: italic;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      letter-spacing: 0.08em;
       color: var(--muted);
     }
 
-    .footer-orbio a {
+    .footer-weblivo a {
       font-size: 11px;
       font-weight: 600;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--muted);
       text-decoration: none;
-      transition: color 0.2s;
+      transition: color 0.15s;
     }
 
-    .footer-orbio a:hover { color: var(--terra); }
+    .footer-weblivo a:hover { color: var(--yellow); }
 
     @media (max-width: 600px) {
       .topbar { padding: 0 20px; }
@@ -352,15 +347,15 @@
 
   <div class="demo-bar">
     <div style="display:flex;gap:8px;">
-      <a href="index.html" class="demo-bar-back">← Orbio</a>
-      <a href="demo-restaurant.html" class="demo-bar-back">← Brasa</a>
+      <a href="index.html" class="demo-bar-back">← Weblivo</a>
+      <a href="demo-gym.html" class="demo-bar-back">← APEX</a>
     </div>
     <span class="demo-bar-badge">Demo</span>
   </div>
 
   <main>
-    <p class="page-label">Reservasjon</p>
-    <h1 class="page-title">Reserver ditt <em>bord</em></h1>
+    <p class="page-label">Medlemskap</p>
+    <h1 class="page-title">Bli <span>medlem</span> i dag</h1>
     <div class="divider"></div>
 
     <div class="demo-notice" id="demoNotice">
@@ -378,81 +373,64 @@
           <input type="text" id="navn" placeholder="Ditt fulle navn" required />
         </div>
         <div class="form-group">
+          <label for="epost">E-post</label>
+          <input type="email" id="epost" placeholder="din@epost.no" required />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
           <label for="telefon">Telefon</label>
-          <input type="tel" id="telefon" placeholder="+47 000 00 000" required />
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="dato">Dato</label>
-          <input type="date" id="dato" required />
+          <input type="tel" id="telefon" placeholder="+47 000 00 000" />
         </div>
         <div class="form-group">
-          <label for="tid">Tid</label>
-          <select id="tid" required>
-            <option value="" disabled selected>Velg tid</option>
-            <option>17:00</option>
-            <option>17:30</option>
-            <option>18:00</option>
-            <option>18:30</option>
-            <option>19:00</option>
-            <option>19:30</option>
-            <option>20:00</option>
-            <option>20:30</option>
-            <option>21:00</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="gjester">Antall gjester</label>
-          <select id="gjester" required>
-            <option value="" disabled selected>Velg antall</option>
-            <option>1 person</option>
-            <option>2 personer</option>
-            <option>3 personer</option>
-            <option>4 personer</option>
-            <option>5 personer</option>
-            <option>6 personer</option>
-            <option>7–10 personer</option>
-            <option>Over 10 (kontakt oss)</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="anledning">Anledning</label>
-          <select id="anledning">
-            <option value="" disabled selected>Valgfritt</option>
-            <option>Middag</option>
-            <option>Bursdag</option>
-            <option>Jubileum</option>
-            <option>Bedriftsarrangement</option>
-            <option>Annet</option>
-          </select>
+          <label for="alder">Alder</label>
+          <input type="number" id="alder" placeholder="18" min="15" max="100" />
         </div>
       </div>
 
       <div class="form-group">
-        <label for="melding">Spesielle ønsker (valgfritt)</label>
-        <textarea id="melding" placeholder="Allergier, høystol, spesielle ønsker..."></textarea>
+        <label for="pakke">Velg medlemskap</label>
+        <select id="pakke" required>
+          <option value="" disabled selected>Velg pakke</option>
+          <option>Basis, 499 kr/mnd</option>
+          <option>Pro, 699 kr/mnd</option>
+          <option>Elite, 999 kr/mnd</option>
+        </select>
       </div>
 
-      <button type="submit" class="submit-btn">Bekreft reservasjon</button>
+      <div class="form-group">
+        <label for="klasse">Favoritt-klasse (valgfritt)</label>
+        <select id="klasse">
+          <option value="" disabled selected>Velg klasse</option>
+          <option>HIIT</option>
+          <option>Styrketrening</option>
+          <option>Yoga &amp; Mobilitet</option>
+          <option>Spinning</option>
+          <option>Boksing</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="melding">Kommentar (valgfritt)</label>
+        <textarea id="melding" placeholder="Spørsmål, skader, treningsmål..."></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">Meld meg inn</button>
     </form>
 
     <div class="success" id="successMsg">
       <div class="success-icon">✓</div>
       <div class="success-title">Ser bra ut!</div>
-      <p class="success-text">Skjemaet ble sendt inn — men dette er bare en demo. Ingen data ble lagret eller sendt videre.</p>
-      <div class="success-demo-note">🔒 Demo — ingen informasjon ble sendt</div>
-      <a href="demo-restaurant.html" class="back-btn">← Tilbake til Brasa</a>
+      <p class="success-text">Skjemaet ble sendt inn, men dette er bare en demo. Ingen data ble lagret eller sendt videre.</p>
+      <div class="success-demo-note">🔒 Demo: ingen informasjon ble sendt</div>
+      <a href="demo-gym.html" class="back-btn">← Tilbake til APEX</a>
     </div>
   </main>
 
   <footer>
-    <span class="footer-name">Brasa Restaurant</span>
-    <span class="footer-orbio"><a href="index.html">Nettside av Orbio</a></span>
+    <span class="footer-name">APEX Treningssenter</span>
+    <span class="footer-weblivo"><a href="index.html">Nettside av Weblivo</a></span>
   </footer>
 
   <script>
@@ -462,8 +440,6 @@
       document.getElementById('demoNotice').classList.add('hide');
       document.getElementById('successMsg').classList.add('show');
     });
-
-    document.getElementById('dato').min = new Date().toISOString().split('T')[0];
   </script>
 
 </body>

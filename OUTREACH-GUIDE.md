@@ -1,4 +1,4 @@
-# Orbio — Komplett outreach-guide
+# Weblivo — Komplett outreach-guide
 
 Hvordan finne, kontakte og pitche potensielle kunder (lokale norske SMB-er).
 
@@ -103,11 +103,11 @@ Prinsipper: kort, lokalt, om DEM (ikke om deg), én tydelig oppfordring, vis i s
 > Hvis dette er interessant tar jeg gjerne en kjapp prat — uforpliktende. Passer det med en kort telefon denne uka?
 >
 > Mvh
-> [navn] — [telefon] — [orbio-lenke]
+> [navn] — [telefon] — [weblivo-lenke]
 
 ### Telefonmanus
 
-> "Hei, det er [navn] fra Orbio. Har du to minutter? — Jeg lager nettsider for [bransje] her i [by], og jeg ringer fordi jeg la merke til at dere [observasjon]. Jeg har faktisk laget et utkast på hvordan siden deres kunne sett ut. Kan jeg sende deg en lenke, så ser du om det er noe for dere?"
+> "Hei, det er [navn] fra Weblivo. Har du to minutter? — Jeg lager nettsider for [bransje] her i [by], og jeg ringer fordi jeg la merke til at dere [observasjon]. Jeg har faktisk laget et utkast på hvordan siden deres kunne sett ut. Kan jeg sende deg en lenke, så ser du om det er noe for dere?"
 
 Hvis innvending *"vi har ikke tid/penger nå"*:
 > "Helt forståelig — derfor ringer jeg bare. Jeg sender lenken, så ser du på den når det passer. Helt uforpliktende."

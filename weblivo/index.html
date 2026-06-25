@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Orbio — Nettsider med automatisert kundebetjening</title>
+  <title>Weblivo: Nettsider med automatisert kundebetjening</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&family=DM+Serif+Display:ital@1&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,7 +35,8 @@
     }
 
     /* ── PIXEL CURSOR ── */
-    body, a, button { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect x='0' y='0' width='10' height='10' fill='%23ffffff'/%3E%3Crect x='1' y='1' width='8' height='8' fill='%23ff5c00'/%3E%3C/svg%3E") 5 5, auto; }
+    body, a, button { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Crect width='10' height='10' fill='%23ff5c00'/%3E%3C/svg%3E") 5 5, auto; }
+    .btn-primary, .btn-primary * { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Crect width='12' height='12' fill='%23ffffff'/%3E%3Crect x='1' y='1' width='10' height='10' fill='%23ff5c00'/%3E%3C/svg%3E") 6 6, pointer; }
 
     /* ── SCANLINE TEXTURE ── */
     body::before {
@@ -242,6 +243,8 @@
       display: flex;
       gap: 0;
       white-space: nowrap;
+      width: max-content;
+      will-change: transform;
       animation: ticker 22s linear infinite;
     }
 
@@ -430,7 +433,7 @@
     .portfolio-card:hover .portfolio-preview { opacity: 0.85; }
     .portfolio-card:hover .portfolio-cta { color: var(--bg); background: var(--orange); border-color: var(--orange); }
 
-    /* Preview window — represents each site's style */
+    /* Preview window: represents each site's style */
     .portfolio-preview {
       height: 200px;
       position: relative;
@@ -710,7 +713,7 @@
 
   <!-- NAV -->
   <nav>
-    <a href="#" class="nav-logo">Or<span>bio</span></a>
+    <a href="#" class="nav-logo">Web<span>livo</span></a>
     <ul class="nav-links">
       <li><a href="#om">Om</a></li>
       <li><a href="#hvordan">Slik fungerer det</a></li>
@@ -721,12 +724,12 @@
   <!-- HERO -->
   <div class="hero" id="top">
     <div class="hero-inner">
-      <p class="hero-eyebrow">Orbio — nettsider med automatisert kundebetjening</p>
+      <p class="hero-eyebrow">Weblivo: nettsider med automatisert kundebetjening</p>
       <h1 class="hero-headline">
         Nettsiden som<br>betjener kundene<br><span class="accent">automatisk.</span>
       </h1>
       <p class="hero-sub">
-        Vi lager profesjonelle nettsider for lokale Oslo-bedrifter — med automatisert kundebetjening innebygd. Booking, spørsmål og praktisk info går av seg selv, døgnet rundt.
+        Vi lager profesjonelle nettsider for lokale Oslo-bedrifter, med automatisert kundebetjening innebygd. Booking, spørsmål og praktisk info går av seg selv, døgnet rundt.
       </p>
       <div class="hero-cta">
         <a href="#portfolio" class="btn-primary">Se portfolio</a>
@@ -737,14 +740,14 @@
     <div class="hero-ticker">
       <div class="ticker-track">
         <span class="ticker-item">Automatisert <span>kundebetjening</span></span>
-        <span class="ticker-item">Alltid tilgjengelig — <span>24/7</span></span>
+        <span class="ticker-item">Alltid tilgjengelig, <span>24/7</span></span>
         <span class="ticker-item">Oppe innen <span>48 timer</span></span>
         <span class="ticker-item">Ingen tekniske krav</span>
         <span class="ticker-item">Skreddersydd til <span>din bedrift</span></span>
         <span class="ticker-item">Aldri gå glipp av en kunde</span>
         <!-- duplicate for seamless loop -->
         <span class="ticker-item">Automatisert <span>kundebetjening</span></span>
-        <span class="ticker-item">Alltid tilgjengelig — <span>24/7</span></span>
+        <span class="ticker-item">Alltid tilgjengelig, <span>24/7</span></span>
         <span class="ticker-item">Oppe innen <span>48 timer</span></span>
         <span class="ticker-item">Ingen tekniske krav</span>
         <span class="ticker-item">Skreddersydd til <span>din bedrift</span></span>
@@ -761,10 +764,10 @@
     <div class="about-grid">
       <div>
         <p class="about-text reveal">
-          Vi heter Kaushik og Teo og driver Solvr, et lite digitalt konsulentselskap i Oslo. Gjennom Orbio lager vi profesjonelle nettsider med automatisert kundebetjening innebygd — skreddersydd for lokale bedrifter.
+          Vi heter Kaushik og Teo og driver Solvr, et lite digitalt konsulentselskap i Oslo. Gjennom Weblivo lager vi profesjonelle nettsider med automatisert kundebetjening innebygd, skreddersydd for lokale bedrifter.
         </p>
         <p class="about-text reveal">
-          Ingen ansatte som bruker dagene på å svare på de samme spørsmålene igjen og igjen. <strong>Nettsiden tar imot bestillinger, svarer på spørsmål og hjelper kundene videre — automatisk, hele døgnet.</strong>
+          Ingen ansatte som bruker dagene på å svare på de samme spørsmålene igjen og igjen. <strong>Nettsiden tar imot bestillinger, svarer på spørsmål og hjelper kundene videre, automatisk, hele døgnet.</strong>
         </p>
       </div>
 
@@ -799,12 +802,12 @@
       <div class="step-card">
         <div class="step-num">// Steg 02</div>
         <div class="step-title">Vi bygger nettsiden og automatiserer kundebetjeningen</div>
-        <p class="step-desc">Vi bygger en profesjonell nettside tilpasset bransjen din — med automatisert betjening som tar seg av booking, spørsmål og info på egen hånd.</p>
+        <p class="step-desc">Vi bygger en profesjonell nettside tilpasset bransjen din, med automatisert betjening som tar seg av booking, spørsmål og info på egen hånd.</p>
       </div>
       <div class="step-card">
         <div class="step-num">// Steg 03</div>
         <div class="step-title">Du er oppe og kjører på 48 timer</div>
-        <p class="step-desc">Vi leverer alt ferdig satt opp og klart til bruk. Du trenger ikke røre noe teknisk — si ja, så ordner vi resten.</p>
+        <p class="step-desc">Vi leverer alt ferdig satt opp og klart til bruk. Du trenger ikke røre noe teknisk. Si ja, så ordner vi resten.</p>
       </div>
     </div>
   </section>
@@ -817,7 +820,7 @@
         <h2 class="section-title reveal">Se hva vi kan<br>bygge for deg.</h2>
       </div>
       <p class="portfolio-desc reveal">
-        Her er tre nettsider vi har laget — én for en frisørsalong, én for et treningssenter og én for en restaurant. Hver har sitt eget uttrykk, med automatisert kundebetjening innebygd og klar.
+        Her er tre nettsider vi har laget: én for en frisørsalong, én for et treningssenter og én for en restaurant. Hver har sitt eget uttrykk, med automatisert kundebetjening innebygd og klar.
       </p>
     </div>
 
@@ -833,7 +836,7 @@
         <div class="portfolio-body">
           <div class="portfolio-type">Frisørsalong</div>
           <div class="portfolio-title">Lumina Frisørsalong</div>
-          <p class="portfolio-tagline">Myke pastellfarger og feminin eleganse. Kundene bestiller time og får svar på spørsmålene sine — automatisk.</p>
+          <p class="portfolio-tagline">Myke pastellfarger og feminin eleganse. Kundene bestiller time og får svar på spørsmålene sine, automatisk.</p>
           <span class="portfolio-cta">Se demo &rarr;</span>
         </div>
       </a>
@@ -848,7 +851,7 @@
         <div class="portfolio-body">
           <div class="portfolio-type">Treningssenter</div>
           <div class="portfolio-title">APEX Treningssenter</div>
-          <p class="portfolio-tagline">Energisk og tøft design. Nye medlemmer finner all info og melder seg inn — automatisk.</p>
+          <p class="portfolio-tagline">Energisk og tøft design. Nye medlemmer finner all info og melder seg inn, automatisk.</p>
           <span class="portfolio-cta">Se demo &rarr;</span>
         </div>
       </a>
@@ -863,7 +866,7 @@
         <div class="portfolio-body">
           <div class="portfolio-type">Restaurant</div>
           <div class="portfolio-title">Brasa Restaurant</div>
-          <p class="portfolio-tagline">Varm og stilfull atmosfære. Gjestene reserverer bord og får svar om menyen — automatisk.</p>
+          <p class="portfolio-tagline">Varm og stilfull atmosfære. Gjestene reserverer bord og får svar om menyen, automatisk.</p>
           <span class="portfolio-cta">Se demo &rarr;</span>
         </div>
       </a>
@@ -873,8 +876,8 @@
 
   <!-- FOOTER -->
   <footer>
-    <span class="footer-logo">Or<span>bio</span></span>
-    <span class="footer-copy">// 2026 — Alle rettigheter forbeholdt</span>
+    <span class="footer-logo">Web<span>livo</span></span>
+    <span class="footer-copy">// 2026. Alle rettigheter forbeholdt</span>
   </footer>
 
   <script>
